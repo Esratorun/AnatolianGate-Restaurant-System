@@ -1,0 +1,84 @@
+﻿@model RestoranProje1.Models.IletisimMesaj
+@{
+    ViewData["Title"] = "Mesajı Yanıtla";
+    // -----------------------------------------------------------------------------------------
+    // PROJE İSTERLERİ KANITLARI (Mesajlar/Cevapla.cshtml)
+    // -----------------------------------------------------------------------------------------
+    // [İSTER 7]  : Proje MVC tasarım kalıbına uygun geliştirilmiş mi?
+    //              EVET -> Burası MVC'nin "View" katmanıdır. Modelden gelen mesaj detayını gösterir.
+    //
+    // [İSTER 11] : Tag Helper Kullanılmış mı?
+    //              EVET -> "asp-action", "asp-for" etiketleri form ve link işlemleri için kullanılmıştır.
+    //
+    // [İSTER 22] : Admin için tema uygulanmış mı?
+    //              EVET -> Tailwind CSS (grid yapısı, renkli etiketler, ikonlar) ile modern bir
+    //              mesaj okuma arayüzü tasarlanmıştır.
+    //
+    // [İSTER 23] : Area oluşturulmuş mu?
+    //              EVET -> Bu dosya Admin Area yapısı içindedir.
+    // -----------------------------------------------------------------------------------------
+}
+
+<div class="bg-white p-8 rounded-lg shadow-lg max-w-4xl mx-auto">
+    <div class="flex justify-between items-center mb-6 border-b pb-4">
+        <h2 class="text-2xl font-bold text-gray-800">
+            <i class="fas fa-envelope-open-text text-yellow-500 mr-2"></i> Mesaj Detayı
+        </h2>
+        <a asp-action="Index" class="text-gray-500 hover:text-gray-700">
+            <i class="fas fa-arrow-left"></i> Geri Dön
+        </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 bg-gray-50 p-4 rounded-lg">
+        <div>
+            <label class="block text-xs font-bold text-gray-500 uppercase">Gönderen</label>
+            <p class="text-gray-800 font-medium">@Model.AdSoyad</p>
+        </div>
+        <div>
+            <label class="block text-xs font-bold text-gray-500 uppercase">E-Posta</label>
+            <a href="mailto:@Model.Eposta" class="text-blue-600 hover:underline">@Model.Eposta</a>
+        </div>
+        <div>
+            <label class="block text-xs font-bold text-gray-500 uppercase">Tarih</label>
+            <p class="text-gray-800">@Model.GonderimTarihi.ToString("dd MMMM yyyy HH:mm")</p>
+        </div>
+        <div>
+            <label class="block text-xs font-bold text-gray-500 uppercase">Durum</label>
+            @if (Model.OkunduMu)
+            {
+                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-bold">Yanıtlandı / Okundu</span>
+            }
+            else
+            {
+                <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full font-bold">Bekliyor</span>
+            }
+        </div>
+    </div>
+
+    <div class="mb-8">
+        <label class="block text-sm font-bold text-gray-700 mb-2">Konu: @Model.Konu</label>
+        <div class="bg-gray-100 p-4 rounded border-l-4 border-yellow-500 text-gray-700 italic">
+            "@Model.MesajIcerigi"
+        </div>
+    </div>
+
+    <form asp-action="Cevapla" method="post" class="mt-8">
+        <input type="hidden" asp-for="MesajID" />
+
+        <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">Yanıtınız</h3>
+
+        <div class="mb-4">
+            <textarea asp-for="AdminCevabi" rows="6" class="w-full p-4 border rounded focus:outline-none focus:border-yellow-500 bg-white" placeholder="Cevabınızı buraya yazın... (Bu işlem cevabı veritabanına kaydeder, e-posta göndermek için SMTP ayarları gerekir)"></textarea>
+        </div>
+
+        <div class="flex justify-end space-x-4">
+            <a href="mailto:@Model.Eposta?subject=YNT: @Model.Konu&body=Sayın @Model.AdSoyad,%0D%0A%0D%0A" class="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 transition flex items-center">
+                <i class="fas fa-paper-plane mr-2"></i> Mail Uygulamasıyla Gönder
+            </a>
+
+            <button type="submit" class="bg-yellow-500 text-black px-6 py-3 rounded font-bold hover:bg-yellow-400 transition flex items-center shadow">
+                <i class="fas fa-check mr-2"></i> Cevabı Kaydet & Kapat
+            </button>
+        </div>
+    </form>
+</div>

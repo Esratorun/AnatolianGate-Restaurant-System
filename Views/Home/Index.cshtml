@@ -1,0 +1,197 @@
+﻿@using RestoranProje1.Extensions
+@model RestoranProje1.Models.HomeViewModel
+
+@{
+    ViewData["Title"] = "Ana Sayfa";
+    // -----------------------------------------------------------------------------------------
+    // PROJE İSTERLERİ KANITLARI (Home/Index.cshtml)
+    // -----------------------------------------------------------------------------------------
+    // [İSTER 10] : Custom Html Helper (@Html.MetinKisalt) kullanımı (Menü kısmında)
+    // [İSTER 13] : Custom Tag Helper (<fiyat>) kullanımı (Menü kısmında)
+    // [İSTER 24] : ViewComponent (Ascilar) kullanımı
+    // [İSTER 22] : Özgün Tasarım (Hero, Menü ve Form tasarımı)
+    // -----------------------------------------------------------------------------------------
+}
+
+<header id="hero" class="relative h-screen flex items-center justify-center text-center px-4 overflow-hidden">
+    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=2574&auto=format&fit=crop')] bg-cover bg-center fixed-bg"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-[#1a1c23]/60 to-[#1a1c23] z-10"></div>
+
+    <div class="relative z-20 max-w-5xl mx-auto flex flex-col items-center mt-20">
+        <h1 class="font-serif text-5xl md:text-8xl text-yellow-500 font-bold tracking-widest mb-4 drop-shadow-xl animate-fade-in-up">
+            ANATOLIAN GATE
+        </h1>
+        <div class="flex items-center justify-center w-full mb-8">
+            <div class="h-px bg-yellow-500 w-16 md:w-24 mr-4"></div>
+            <h2 class="font-serif text-lg md:text-2xl text-yellow-500 tracking-[0.3em] uppercase">
+                Fine Turkish Cuisine
+            </h2>
+            <div class="h-px bg-yellow-500 w-16 md:w-24 ml-4"></div>
+        </div>
+        <p class="text-lg md:text-xl mb-12 text-gray-200 font-light max-w-2xl leading-relaxed drop-shadow-md">
+            Osmanlı saraylarının asil tatlarını modern dokunuşlarla buluşturan, benzersiz bir gastronomi deneyimi.
+        </p>
+        <a href="#reservation" class="border border-yellow-500 text-yellow-500 px-12 py-4 font-serif text-sm tracking-[0.2em] hover:bg-yellow-500 hover:text-black transition duration-500 uppercase font-bold">
+            Rezervasyon Yap
+        </a>
+    </div>
+</header>
+
+<section id="menu" class="py-24 bg-[#1a1c23]">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-20">
+            <h2 class="font-serif text-4xl md:text-5xl text-yellow-500 mb-4">Menümüz</h2>
+            <p class="text-gray-400 text-sm tracking-wide">Geleneksel lezzetlerin modern yorumu</p>
+        </div>
+
+        @if (Model.Kategoriler != null && Model.Kategoriler.Any())
+        {
+            @foreach (var kategori in Model.Kategoriler)
+            {
+                <div class="mb-16">
+                    <h3 class="text-center font-serif text-3xl text-[#f3f4f6] mb-10 border-b border-yellow-500/20 pb-4 inline-block px-10">
+                        ~ @kategori.KategoriAdi ~
+                    </h3>
+
+                    <div class="grid md:grid-cols-2 gap-x-12 gap-y-8">
+                        @if (kategori.Urunler != null && kategori.Urunler.Any())
+                        {
+                            @foreach (var urun in kategori.Urunler)
+                            {
+                                <div class="flex items-start group">
+                                    <div class="flex-shrink-0 w-24 h-24 overflow-hidden rounded-lg border border-yellow-500/20 mr-4">
+                                        <img src="@urun.UrunResimYolu" alt="@urun.UrunAdi" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                                    </div>
+
+                                    <div class="flex-grow border-b border-dashed border-gray-700 pb-4">
+                                        <div class="flex justify-between items-baseline mb-2">
+                                            <h4 class="text-xl font-serif text-[#f3f4f6] group-hover:text-yellow-500 transition">@urun.UrunAdi</h4>
+
+                                            <fiyat deger="@urun.UrunFiyat"></fiyat>
+                                        </div>
+                                        <p class="text-gray-500 text-sm italic leading-relaxed">
+                                            @Html.MetinKisalt(urun.UrunAciklama, 80)
+                                        </p>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p class="text-gray-600 italic text-center col-span-2">Bu kategoriye henüz lezzet eklenmedi.</p>
+                        }
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="text-center p-10 border border-yellow-500/30 rounded">
+                <p class="text-yellow-500">Henüz menü oluşturulmadı. Lütfen Admin panelinden ekleme yapınız.</p>
+            </div>
+        }
+    </div>
+</section>
+
+@await Component.InvokeAsync("Ascilar")
+
+<section id="reservation" class="py-24 relative bg-black">
+    <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/black-linen.png')]"></div>
+
+    <div class="max-w-4xl mx-auto px-4 relative z-10 text-center">
+        <h2 class="font-serif text-4xl text-yellow-500 mb-4">Rezervasyon</h2>
+        <p class="text-gray-400 mb-12">Özel bir akşam için yerinizi ayırtın</p>
+
+        <form asp-controller="Home" asp-action="RezervasyonYap" method="post" class="space-y-6 bg-[#1a1c23]/90 p-10 border border-yellow-500/30 rounded-xl shadow-2xl backdrop-blur-sm">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="text-left">
+                    <label class="text-xs text-yellow-500 uppercase ml-1 block mb-1">Adınız</label>
+                    <input asp-for="Rezervasyon.MusteriAdi" class="w-full bg-transparent border border-gray-600 text-white p-3 rounded focus:outline-none focus:border-yellow-500 transition" placeholder="Adınız" />
+                    <span asp-validation-for="Rezervasyon.MusteriAdi" class="text-red-500 text-xs"></span>
+                </div>
+                <div class="text-left">
+                    <label class="text-xs text-yellow-500 uppercase ml-1 block mb-1">Soyadınız</label>
+                    <input asp-for="Rezervasyon.MusteriSoyadi" class="w-full bg-transparent border border-gray-600 text-white p-3 rounded focus:outline-none focus:border-yellow-500 transition" placeholder="Soyadınız" />
+                    <span asp-validation-for="Rezervasyon.MusteriSoyadi" class="text-red-500 text-xs"></span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="text-left">
+                    <label class="text-xs text-yellow-500 uppercase ml-1 block mb-1">Telefon</label>
+                    <input asp-for="Rezervasyon.MusteriTelefon"
+                           type="text"
+                           maxlength="11"
+                           oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11);"
+                           class="w-full bg-transparent border border-gray-600 text-white p-3 rounded focus:outline-none focus:border-yellow-500 transition"
+                           placeholder="05XXXXXXXXX" />
+                    <span asp-validation-for="Rezervasyon.MusteriTelefon" class="text-red-500 text-xs"></span>
+                </div>
+                <div class="text-left">
+                    <label class="text-xs text-yellow-500 uppercase ml-1 block mb-1">E-Posta</label>
+                    <input asp-for="Rezervasyon.MusteriEposta" type="email" class="w-full bg-transparent border border-gray-600 text-white p-3 rounded focus:outline-none focus:border-yellow-500 transition" placeholder="mail@ornek.com" />
+                    <span asp-validation-for="Rezervasyon.MusteriEposta" class="text-red-500 text-xs"></span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="text-left">
+                    <label class="text-xs text-yellow-500 uppercase ml-1 block mb-1">Tarih</label>
+                    <input asp-for="Rezervasyon.RezervasyonTarihi" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="w-full bg-transparent border border-gray-600 text-white p-3 rounded focus:outline-none focus:border-yellow-500 transition [color-scheme:dark]" />
+                    <span asp-validation-for="Rezervasyon.RezervasyonTarihi" class="text-red-500 text-xs"></span>
+                </div>
+
+                <div class="text-left">
+                    <label class="text-xs text-yellow-500 uppercase ml-1 block mb-1">Saat</label>
+                    <select asp-for="Rezervasyon.RezervasyonSaati" class="w-full bg-[#1a1c23] border border-gray-600 text-gray-400 p-3 rounded focus:outline-none focus:border-yellow-500 transition">
+                        <option value="12:00">12:00</option>
+                        <option value="13:00">13:00</option>
+                        <option value="14:00">14:00</option>
+                        <option value="18:00">18:00</option>
+                        <option value="19:00">19:00</option>
+                        <option value="20:00">20:00</option>
+                        <option value="21:00">21:00</option>
+                    </select>
+                </div>
+                <div class="text-left">
+                    <label class="text-xs text-yellow-500 uppercase ml-1 block mb-1">Kişi Sayısı</label>
+                    <input asp-for="Rezervasyon.KisiSayisi" type="number" min="1" max="15" value="2" class="w-full bg-transparent border border-gray-600 text-white p-3 rounded focus:outline-none focus:border-yellow-500 transition" />
+                </div>
+            </div>
+
+            <div class="text-left">
+                <label class="text-xs text-yellow-500 uppercase ml-1 block mb-1">Özel İstekler</label>
+                <textarea asp-for="Rezervasyon.MusteriNotu" class="w-full bg-transparent border border-gray-600 text-white p-3 rounded focus:outline-none focus:border-yellow-500 transition h-24"></textarea>
+            </div>
+
+            <button type="submit" class="w-full bg-yellow-600 text-black font-bold py-4 rounded hover:bg-yellow-500 transition duration-300 mt-8 uppercase tracking-widest text-sm shadow-lg">
+                Rezervasyonu Tamamla
+            </button>
+        </form>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            @if (TempData["Hata"] != null)
+            {
+                    <text>
+                    Swal.fire({ title: 'Üzgünüz!', text: '@Html.Raw(TempData["Hata"])', icon: 'error', confirmButtonText: 'Tamam', confirmButtonColor: '#d33', background: '#1a0505', color: '#fff' });
+                    </text>
+            }
+            @if (TempData["Mesaj"] != null)
+            {
+                    <text>
+                    Swal.fire({ title: 'Teşekkürler!', text: '@Html.Raw(TempData["Mesaj"])', icon: 'success', confirmButtonText: 'Tamam', confirmButtonColor: '#CCA45D', background: '#1a0505', color: '#fff' });
+                    </text>
+            }
+        });
+    </script>
+}

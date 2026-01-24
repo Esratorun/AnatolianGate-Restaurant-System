@@ -1,0 +1,139 @@
+﻿@model List<RestoranProje1.Models.Urun>
+
+@{
+    ViewData["Title"] = "Ürün Listesi";
+}
+
+<div class="bg-white p-6 rounded-lg shadow-lg">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">Ürünler</h2>
+        <a asp-action="Ekle" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition shadow flex items-center">
+            <i class="fas fa-plus mr-2"></i> Yeni Ürün
+        </a>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table id="tblUrunler" class="display w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
+                    <th class="py-3 px-6">Resim</th>
+                    <th class="py-3 px-6">Ürün Adı</th>
+                    <th class="py-3 px-6">Fiyat</th>
+                    <th class="py-3 px-6">Kategori</th>
+                    <th class="py-3 px-6 text-center">İşlemler</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-600 text-sm font-light">
+                @foreach (var item in Model)
+                {
+                    <tr class="border-b border-gray-200 hover:bg-gray-100 transition">
+                        <td class="py-3 px-6">
+                            @if (!string.IsNullOrEmpty(item.UrunResimYolu))
+                            {
+                                <img src="@item.UrunResimYolu" alt="@item.UrunAdi" class="w-12 h-12 object-cover rounded-full border border-gray-300 shadow-sm" />
+                            }
+                            else
+                            {
+                                <span class="text-gray-400 text-xs italic">Resim Yok</span>
+                            }
+                        </td>
+                        <td class="py-3 px-6 font-medium text-gray-800">
+                            @item.UrunAdi
+                            @if (item.UrunOneCikanlar)
+                            {
+                                <i class="fas fa-star text-yellow-400 ml-1"></i>
+                            }
+                        </td>
+                        <td class="py-3 px-6 text-green-600 font-bold">@item.UrunFiyat.ToString("C2")</td>
+                        <td class="py-3 px-6">
+                            <span class="bg-purple-100 text-purple-600 py-1 px-3 rounded-full text-xs font-semibold">
+                                @(item.Kategori?.KategoriAdi ?? "Kategorisiz")
+                            </span>
+                        </td>
+                        <td class="py-3 px-6 text-center">
+                            <div class="flex item-center justify-center">
+                                <a asp-action="Duzenle" asp-route-id="@item.UrunID" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition mx-1 shadow">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button onclick="silmeOnayi(@item.UrunID)" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition mx-1 shadow">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @* Sayfalama Butonları *@
+    <div class="mt-4 flex justify-between items-center bg-gray-50 p-4 rounded">
+        <div>
+            <span class="text-sm text-gray-600">Sayfa Başına:</span>
+            <select onchange="window.location.href='?pageSize=' + this.value" class="border rounded p-1 text-sm">
+                <option value="10" selected="@(ViewBag.PageSize == 10)">10</option>
+                <option value="25" selected="@(ViewBag.PageSize == 25)">25</option>
+                <option value="50" selected="@(ViewBag.PageSize == 50)">50</option>
+            </select>
+        </div>
+        <div class="flex space-x-1">
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <a href="?page=@i&pageSize=@ViewBag.PageSize"
+                   class="px-3 py-1 border rounded text-sm @(i == ViewBag.CurrentPage ? "bg-blue-600 text-white" : "bg-white text-gray-700 hover:bg-gray-100")">
+                    @i
+                </a>
+            }
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        $(document).ready(function () {
+            // DataTables'ı başlatıyoruz
+            $('#tblUrunler').DataTable({
+                language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/tr.json' },
+                responsive: true,
+                paging: false, // Sayfalamayı Manuel (Server-side) yaptığımız için kapalı
+                info: false,   // Manuel sayfalama ile çakışmasın diye kapalı
+                searching: true, // ARAMA KUTUSU GERİ GELDİ
+                ordering: true,  // SIRALAMA OKLARI GERİ GELDİ
+                columnDefs: [
+                    { orderable: false, targets: [0, 4] } // Resim ve İşlemler sütununda sıralamayı kapat
+                ]
+            });
+
+            @if (TempData["Basarili"] != null)
+            {
+                    <text>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Başarılı!',
+                        text: '@Html.Raw(TempData["Basarili"])',
+                        confirmButtonColor: '#CCA45D'
+                    });
+                    </text>
+            }
+        });
+
+        function silmeOnayi(id) {
+            Swal.fire({
+                title: 'Emin misiniz?',
+                text: "Bu ürünü silmek istediğinize emin misiniz?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Evet, Sil!',
+                cancelButtonText: 'İptal'
+            }).then((result) => {
+                if (result.isConfirmed) { window.location.href = '/Admin/Urun/Sil/' + id; }
+            })
+        }
+    </script>
+}

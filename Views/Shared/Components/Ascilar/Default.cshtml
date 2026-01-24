@@ -1,0 +1,30 @@
+﻿@model List<RestoranProje1.Models.Asci>
+
+<section id="chefs" class="py-24 bg-anatolia-dark">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-16">
+            <h2 class="font-serif text-4xl md:text-5xl text-anatolia-gold mb-4">Ustalarımız</h2>
+            <div class="w-24 h-1 bg-anatolia-gold mx-auto rounded-full"></div>
+            <p class="text-gray-400 mt-4">Lezzetin arkasındaki kahramanlar</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-12">
+            @foreach (var item in Model)
+            {
+                <div class="group relative overflow-hidden rounded-xl">
+                    <div class="aspect-w-3 aspect-h-4">
+                        <img src="@item.AsciResimYolu" alt="@item.AsciAdi" class="w-full h-[400px] object-cover transition duration-500 group-hover:scale-110">
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90"></div>
+                    <div class="absolute bottom-0 left-0 w-full p-6 text-center transform translate-y-4 group-hover:translate-y-0 transition duration-300">
+                        <h3 class="text-xl font-serif text-anatolia-gold mb-1">@item.AsciAdi @item.AsciSoyadi</h3>
+                        <p class="text-sm text-gray-300 uppercase tracking-wider mb-4">@item.AsciUnvan</p>
+                        <p class="text-gray-400 text-sm italic opacity-0 group-hover:opacity-100 transition duration-300 delay-100">
+                            "@item.AsciBiyografi"
+                        </p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

@@ -1,0 +1,106 @@
+﻿@using RestoranProje1.Extensions
+@model List<RestoranProje1.Models.Kategori>
+
+@{
+    ViewData["Title"] = "Menümüz";
+    // -----------------------------------------------------------------------------------------
+    // PROJE İSTERLERİ KANITLARI (Home/Menu.cshtml)
+    // -----------------------------------------------------------------------------------------
+    // [İSTER 14] : Razor Syntax (Döngüler ve Karar Yapıları)
+    //              EVET -> İç içe foreach döngüleri ile Kategori -> Ürün listelemesi yapılmıştır.
+    //
+    // [İSTER 13] : Custom Tag Helper (<fiyat>) Kullanımı
+    //              EVET -> Ürün fiyatlarını formatlamak için özel oluşturulan etiket kullanılmıştır.
+    //
+    // [İSTER 10] : Custom Html Helper (@Html.MetinKisalt) Kullanımı
+    //              EVET -> Ürün açıklamaları uzunsa kısaltılarak gösterilir.
+    // -----------------------------------------------------------------------------------------
+}
+
+<section class="relative h-[50vh] flex items-center justify-center bg-black">
+    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=1974&auto=format&fit=crop')] bg-cover bg-center opacity-40"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-[#1a1c23] via-transparent to-black/60"></div>
+
+    <div class="relative z-10 text-center mt-10">
+        <h1 class="font-serif text-5xl md:text-7xl text-yellow-500 font-bold tracking-widest drop-shadow-2xl">
+            LEZZET YOLCULUĞU
+        </h1>
+        <p class="text-[#f3f4f6] text-lg mt-4 tracking-wide font-light">
+            Geleneksel tatların modern yorumuyla tanışın
+        </p>
+        <div class="w-24 h-1 bg-yellow-500 mx-auto mt-6 rounded-full"></div>
+    </div>
+</section>
+
+<section class="py-20 bg-[#1a1c23] relative">
+    <div class="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/black-linen.png')]"></div>
+
+    <div class="max-w-7xl mx-auto px-4 relative z-10">
+
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var kategori in Model)
+            {
+                <div class="mb-20">
+                    <div class="text-center mb-12">
+                        <h2 class="font-serif text-4xl text-[#f3f4f6] inline-block relative px-8 py-2 border-b-2 border-yellow-500/30">
+                            <span class="text-yellow-500 mr-2">~</span>
+                            @kategori.KategoriAdi
+                            <span class="text-yellow-500 ml-2">~</span>
+                        </h2>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-x-16 gap-y-12">
+                        @if (kategori.Urunler != null && kategori.Urunler.Any())
+                        {
+                            @foreach (var urun in kategori.Urunler)
+                            {
+                                <div class="group flex items-start space-x-6 p-4 rounded-xl hover:bg-white/5 transition duration-300 border border-transparent hover:border-yellow-500/10">
+
+                                    <div class="flex-shrink-0 w-28 h-28 overflow-hidden rounded-full border-2 border-yellow-500/20 shadow-lg group-hover:border-yellow-500 transition duration-500">
+                                        <img src="@urun.UrunResimYolu" alt="@urun.UrunAdi" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500">
+                                    </div>
+
+                                    <div class="flex-grow">
+                                        <div class="flex justify-between items-baseline border-b border-dashed border-gray-700 pb-2 mb-3 group-hover:border-yellow-500/30 transition">
+                                            <h3 class="text-xl font-serif text-[#f3f4f6] font-bold group-hover:text-yellow-500 transition">
+                                                @urun.UrunAdi
+                                            </h3>
+
+                                            <fiyat deger="@urun.UrunFiyat"></fiyat>
+                                        </div>
+
+                                        <p class="text-gray-400 text-sm italic leading-relaxed">
+                                            @Html.MetinKisalt(urun.UrunAciklama, 100)
+                                        </p>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="col-span-2 text-center text-gray-500 italic py-8 border border-dashed border-gray-800 rounded-lg">
+                                Bu kategoride henüz ürün bulunmamaktadır.
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="text-center py-20">
+                <i class="fas fa-utensils text-6xl text-gray-700 mb-4"></i>
+                <p class="text-gray-500 text-xl">Henüz menü oluşturulmadı.</p>
+            </div>
+        }
+
+    </div>
+</section>
+
+<section class="py-16 bg-black text-center border-t border-yellow-500/20">
+    <h3 class="font-serif text-3xl text-yellow-500 mb-6">Bu Lezzetleri Tatmak İster misiniz?</h3>
+    <a asp-controller="Home" asp-action="Rezervasyon" class="inline-block border border-yellow-500 text-yellow-500 px-10 py-3 font-serif text-sm tracking-widest uppercase hover:bg-yellow-500 hover:text-black transition duration-300 font-bold">
+        Hemen Rezervasyon Yap
+    </a>
+</section>

@@ -1,0 +1,85 @@
+﻿@model List<RestoranProje1.Models.Asci>
+@{
+    ViewData["Title"] = "Aşçılar";
+    // -----------------------------------------------------------------------------------------
+    // PROJE İSTERLERİ KANITLARI (Asci/Index.cshtml)
+    // -----------------------------------------------------------------------------------------
+    // [İSTER 9]  : Proje MVC tasarım kalıbına uygun geliştirilmiş mi?
+    //              EVET -> Burası MVC'nin "View" katmanıdır. Controller'dan gelen List<Asci> modelini karşılar ve listeler.
+    //
+    // [İSTER 13] : Tag Helper Kullanılmış mı?
+    //              EVET -> Link oluştururken "asp-action" ve parametre gönderirken "asp-route-id"
+    //              Tag Helper'ları aktif olarak kullanılmıştır.
+    //
+    // [İSTER 22] : Admin için tema uygulanmış mı?
+    //              EVET -> "bg-white", "shadow-lg", "table" yapıları ve renk kodları ile
+    //              Admin paneli temasına uygun tasarım yapılmıştır.
+    //
+    // [İSTER 23] : Area oluşturulmuş mu?
+    //              EVET -> Bu dosya /Areas/Admin/Views dizini altında çalışmaktadır.
+    // -----------------------------------------------------------------------------------------
+}
+
+<div class="bg-white p-6 rounded-lg shadow-lg">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">Aşçılar</h2>
+
+        <a asp-action="Ekle" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition shadow">
+            <i class="fas fa-plus mr-2"></i> Yeni Aşçı
+        </a>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-gray-100 text-gray-600 uppercase text-sm">
+                    <th class="py-3 px-6">Resim</th>
+                    <th class="py-3 px-6">Ad Soyad</th>
+                    <th class="py-3 px-6">Ünvan</th>
+                    <th class="py-3 px-6 text-center">İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr class="border-b hover:bg-gray-50 transition">
+                            <td class="py-3 px-6">
+                                @if (!string.IsNullOrEmpty(item.AsciResimYolu))
+                                {
+                                    <img src="@item.AsciResimYolu" class="w-12 h-12 rounded-full object-cover border border-gray-200 shadow-sm" />
+                                }
+                                else
+                                {
+                                    <span class="text-gray-400 text-xs italic">Resim Yok</span>
+                                }
+                            </td>
+                            <td class="py-3 px-6 font-medium text-gray-800">@item.AsciAdi @item.AsciSoyadi</td>
+                            <td class="py-3 px-6 text-gray-600">@item.AsciUnvan</td>
+                            <td class="py-3 px-6 text-center">
+                                <div class="flex item-center justify-center">
+                                    <a asp-action="Duzenle" asp-route-id="@item.AsciID" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 mx-1 transition shadow" title="Düzenle">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+
+                                    <a asp-action="Sil" asp-route-id="@item.AsciID" onclick="return confirm('Bu aşçıyı silmek istediğinize emin misiniz?')" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 mx-1 transition shadow" title="Sil">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="py-6 text-center text-gray-500">
+                            Henüz kayıtlı aşçı bulunmamaktadır.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

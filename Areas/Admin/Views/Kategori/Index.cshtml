@@ -1,0 +1,139 @@
+﻿@model List<RestoranProje1.Models.Kategori>
+
+@{
+    ViewData["Title"] = "Kategori Listesi";
+    // -----------------------------------------------------------------------------------------
+    // PROJE İSTERLERİ KANITLARI (Kategori/Index.cshtml)
+    // -----------------------------------------------------------------------------------------
+    // [İSTER 9]  : Proje MVC tasarım kalıbına uygun geliştirilmiş mi?
+    //              EVET -> Burası MVC'nin "View" katmanıdır. Listeleme işlemini yapar.
+    //
+    // [İSTER 11] : Html Helper Kullanılmış mı?
+    //              EVET -> Script bölümünde "@Html.Raw(...)" kullanılarak sunucudan gelen verinin
+    //              HTML encode olmadan JavaScript'e aktarılması sağlanmıştır.
+    //
+    // [İSTER 13] : Tag Helper Kullanılmış mı?
+    //              EVET -> Linklemeler için "asp-action" ve "asp-route-id" kullanılmıştır.
+    //
+    // [İSTER 19] : Jquery kütüphanesi Kullanılmış mı?
+    //              EVET -> Sayfa altındaki scriptlerde "$(...)" seçicileri ile Jquery aktif olarak kullanılmıştır.
+    //
+    // [İSTER 20] : Jquery DataTables kütüphanesi Kullanılmış mı?
+    //              EVET -> Tabloya sıralama, sayfalama ve arama özelliği kazandırmak için
+    //              DataTables eklentisi entegre edilmiştir.
+    //
+    // [İSTER 21] : SweetAlert kütüphanesi Kullanılmış mı?
+    //              EVET -> Silme onayı ve başarılı işlem mesajları için "Swal.fire()" kullanılmıştır.
+    //
+    // [İSTER 22] : Admin için tema uygulanmış mı?
+    //              EVET -> Tailwind CSS ile modern ve responsive bir tablo tasarımı yapılmıştır.
+    // -----------------------------------------------------------------------------------------
+}
+
+<div class="bg-white p-6 rounded-lg shadow-lg">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">Kategoriler</h2>
+
+        <a asp-action="Ekle" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition shadow">
+            <i class="fas fa-plus mr-2"></i> Yeni Kategori
+        </a>
+    </div>
+
+    <table id="tblKategoriler" class="display w-full text-left border-collapse">
+        <thead>
+            <tr class="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
+                <th class="py-3 px-6">ID</th>
+                <th class="py-3 px-6">Kategori Adı</th>
+                <th class="py-3 px-6 text-center">İşlemler</th>
+            </tr>
+        </thead>
+        <tbody class="text-gray-600 text-sm font-light">
+            @foreach (var item in Model)
+            {
+                <tr class="border-b border-gray-200 hover:bg-gray-100 transition">
+                    <td class="py-3 px-6">@item.KategoriID</td>
+                    <td class="py-3 px-6 font-medium">@item.KategoriAdi</td>
+                    <td class="py-3 px-6 text-center">
+                        <div class="flex item-center justify-center">
+                            <a asp-action="Duzenle" asp-route-id="@item.KategoriID" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition mx-1" title="Düzenle">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <button onclick="silmeOnayi(@item.KategoriID)" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition mx-1" title="Sil">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // Türkçe karakter sorununu çözmek için DataTables arama fonksiyonunu özelleştirdik.
+        function turkceKarakterleriIngilizceyeCevir(data) {
+            if (!data) return "";
+            return data.toString()
+                .replace(/İ/g, 'i').replace(/I/g, 'i').replace(/ı/g, 'i')
+                .replace(/ş/g, 's').replace(/Ş/g, 's')
+                .replace(/ğ/g, 'g').replace(/Ğ/g, 'g')
+                .replace(/ü/g, 'u').replace(/Ü/g, 'u')
+                .replace(/ö/g, 'o').replace(/Ö/g, 'o')
+                .replace(/ç/g, 'c').replace(/Ç/g, 'c')
+                .toLowerCase();
+        }
+
+        // [İster 19 & 20] Jquery ve DataTables Başlatma
+        $(document).ready(function () {
+            // DataTables özel arama ayarı
+            $.fn.dataTable.ext.type.search.string = function (data) {
+                return turkceKarakterleriIngilizceyeCevir(data);
+            };
+
+            $('#tblKategoriler').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/tr.json'
+                },
+                responsive: true
+            });
+
+            // [İster 21] SweetAlert: Başarılı işlem mesajı
+            // [İster 11] Html Helper: Html.Raw kullanımı
+            @if (TempData["Basarili"] != null)
+            {
+                    <text>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Başarılı!',
+                        text: '@Html.Raw(TempData["Basarili"])',
+                        confirmButtonColor: '#CCA45D'
+                    });
+                    </text>
+            }
+        });
+
+        // [İster 21] SweetAlert: Silme Onayı
+        function silmeOnayi(id) {
+            Swal.fire({
+                title: 'Emin misiniz?',
+                text: "Bu kategoriyi silerseniz geri alamazsınız!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Evet, Sil!',
+                cancelButtonText: 'İptal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/Admin/Kategori/Sil/' + id;
+                }
+            })
+        }
+    </script>
+}

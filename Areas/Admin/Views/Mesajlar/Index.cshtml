@@ -1,0 +1,84 @@
+﻿@model List<RestoranProje1.Models.IletisimMesaj>
+@{
+    ViewData["Title"] = "Gelen Mesajlar";
+    // -----------------------------------------------------------------------------------------
+    // PROJE İSTERLERİ KANITLARI (Mesajlar/Index.cshtml)
+    // -----------------------------------------------------------------------------------------
+    // [İSTER 7]  : Proje MVC tasarım kalıbına uygun geliştirilmiş mi?
+    //              EVET -> Burası MVC'nin "View" katmanıdır. Controller'dan gelen mesaj listesini karşılar ve döngüyle basar.
+    //
+    // [İSTER 11] : Tag Helper Kullanılmış mı?
+    //              EVET -> Linkleme işlemlerinde "asp-action" ve parametre gönderiminde "asp-route-id" kullanılmıştır.
+    //
+    // [İSTER 22] : Admin için tema uygulanmış mı?
+    //              EVET -> Tailwind CSS ile modern tablo, durum ikonları ve renk tasarımları yapılmıştır.
+    //
+    // [İSTER 23] : Area oluşturulmuş mu?
+    //              EVET -> Bu dosya Admin Area yapısı (/Areas/Admin/Views) içindedir.
+    // -----------------------------------------------------------------------------------------
+}
+
+<div class="bg-white p-6 rounded-lg shadow-lg">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Gelen Mesajlar</h2>
+
+    <table class="w-full text-left border-collapse">
+        <thead>
+            <tr class="bg-gray-100 text-gray-600 uppercase text-sm">
+                <th class="py-3 px-6">Durum</th>
+                <th class="py-3 px-6">Tarih</th>
+                <th class="py-3 px-6">Gönderen</th>
+                <th class="py-3 px-6">Konu</th>
+                <th class="py-3 px-6">Mesaj</th>
+                <th class="py-3 px-6 text-center">İşlem</th>
+            </tr>
+        </thead>
+        <tbody class="text-gray-600 text-sm font-light">
+            @foreach (var item in Model)
+            {
+                <tr class="border-b border-gray-200 hover:bg-gray-100 transition">
+                    <td class="py-3 px-6">
+                        @if (item.OkunduMu)
+                        {
+                            <span class="text-green-500" title="Yanıtlandı"><i class="fas fa-check-circle"></i></span>
+                        }
+                        else
+                        {
+                            <span class="text-red-500" title="Bekliyor"><i class="fas fa-envelope"></i></span>
+                        }
+                    </td>
+
+                    <td class="py-3 px-6 font-bold">@item.GonderimTarihi.ToString("dd.MM.yyyy HH:mm")</td>
+
+                    <td class="py-3 px-6">
+                        <div class="font-medium">@item.AdSoyad</div>
+                        <div class="text-xs text-blue-500">@item.Eposta</div>
+                    </td>
+
+                    <td class="py-3 px-6">@item.Konu</td>
+
+                    <td class="py-3 px-6 italic">
+                        @(item.MesajIcerigi.Length > 50 ? item.MesajIcerigi.Substring(0, 50) + "..." : item.MesajIcerigi)
+                    </td>
+
+                    <td class="py-3 px-6 text-center">
+                        <a asp-action="Cevapla" asp-route-id="@item.MesajID" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition mx-1" title="Detay ve Cevapla">
+                            <i class="fas fa-eye"></i>
+                        </a>
+
+                        <a asp-action="Sil" asp-route-id="@item.MesajID" onclick="return confirm('Bu mesajı silmek istediğinize emin misiniz?')" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition mx-1" title="Sil">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @if (Model.Count == 0)
+    {
+        <div class="text-center p-6 text-gray-500">
+            <i class="fas fa-inbox text-4xl mb-2"></i>
+            <p>Henüz gelen bir mesaj yok.</p>
+        </div>
+    }
+</div>

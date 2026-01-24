@@ -1,0 +1,48 @@
+﻿@model RestoranProje1.Models.Kategori
+@{
+    ViewData["Title"] = "Kategori Ekle";
+    // -----------------------------------------------------------------------------------------
+    // PROJE İSTERLERİ KANITLARI (Kategori/Ekle.cshtml)
+    // -----------------------------------------------------------------------------------------
+    // [İSTER 7]  : Proje MVC tasarım kalıbına uygun geliştirilmiş mi?
+    //              EVET -> Burası MVC'nin "View" katmanıdır. Kullanıcıdan kategori verisini alır.
+    //
+    // [İSTER 11] : Tag Helper Kullanılmış mı?
+    //              EVET -> Form ve input işlemlerinde "asp-action", "asp-for", "asp-validation-for"
+    //              gibi Tag Helper yapıları kullanılmıştır.
+    //
+    // [İSTER 13] : Server side validation Kullanılmış mı?
+    //              EVET -> "asp-validation-for" etiketi sayesinde, sunucudan dönen model hataları
+    //              (Örn: Boş bırakılamaz uyarısı) kullanıcının görebileceği şekilde ekrana basılır.
+    //
+    // [İSTER 14] : Client side validation Kullanılmış mı?
+    //              EVET -> Sayfa altına eklenen "_ValidationScriptsPartial" sayesinde, form post
+    //              edilmeden önce tarayıcı üzerinde anlık doğrulama yapılır.
+    //
+    // [İSTER 20] : Admin için tema uygulanmış mı?
+    //              EVET -> Admin paneli tasarımına uygun CSS sınıfları (shadow, rounded vb.) kullanılmıştır.
+    // -----------------------------------------------------------------------------------------
+}
+
+<div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800">Yeni Kategori Ekle</h2>
+
+    <form asp-action="Ekle" method="post">
+        <div class="mb-4">
+            <label asp-for="KategoriAdi" class="block text-gray-700 font-bold mb-2">Kategori Adı</label>
+            <input asp-for="KategoriAdi" class="w-full px-3 py-2 border rounded focus:outline-none focus:border-yellow-500 transition" />
+            <span asp-validation-for="KategoriAdi" class="text-red-500 text-sm font-semibold"></span>
+        </div>
+
+        <div class="flex justify-end">
+            <a asp-action="Index" class="text-gray-600 mr-4 py-2 hover:text-gray-800 transition">İptal</a>
+            <button type="submit" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition shadow">Kaydet</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

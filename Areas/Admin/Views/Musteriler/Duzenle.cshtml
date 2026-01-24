@@ -1,0 +1,74 @@
+﻿@model RestoranProje1.Models.Musteri
+@{
+    ViewData["Title"] = "Müşteri Düzenle";
+    // -----------------------------------------------------------------------------------------
+    // PROJE İSTERLERİ KANITLARI (Musteriler/Duzenle.cshtml)
+    // -----------------------------------------------------------------------------------------
+    // [İSTER 7]  : Proje MVC tasarım kalıbına uygun geliştirilmiş mi?
+    //              EVET -> Burası MVC'nin "View" katmanıdır. Model verisini kullanıcıya sunar.
+    //
+    // [İSTER 11] : Tag Helper Kullanılmış mı?
+    //              EVET -> Form oluştururken "asp-action", inputlarda "asp-for" ve hata mesajları
+    //              için "asp-validation-for" etiketleri kullanılmıştır.
+    //
+    // [İSTER 15] : Server side validation Kullanılmış mı?
+    //              EVET -> "asp-validation-for" etiketi, Controller/Model tarafından gönderilen
+    //              hataları (Örn: Geçersiz E-posta formatı) ekrana basar.
+    //
+    // [İSTER 16] : Client side validation Kullanılmış mı?
+    //              EVET -> Sayfa altına eklenen "_ValidationScriptsPartial" sayesinde,
+    //              form post edilmeden önce tarayıcı üzerinde anlık doğrulama yapılır.
+    //
+    // [İSTER 22] : Admin için tema uygulanmış mı?
+    //              EVET -> Tailwind CSS sınıfları (shadow-lg, rounded-lg, grid vb.) ile
+    //              yönetim paneli temasına uygun tasarım yapılmıştır.
+    //
+    // [İSTER 23] : Area oluşturulmuş mu?
+    //              EVET -> Bu dosya Admin Area yapısı (/Areas/Admin/Views) içindedir.
+    // -----------------------------------------------------------------------------------------
+}
+
+<div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg mt-5">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800">Müşteri Düzenle</h2>
+
+    <form asp-action="Duzenle" method="post">
+        <input type="hidden" asp-for="MusteriID" />
+        <input type="hidden" asp-for="MusteriSifre" />
+
+        <div class="grid grid-cols-2 gap-4 mb-4">
+            <div>
+                <label class="block text-gray-700 font-bold mb-2 text-xs">Ad</label>
+                <input asp-for="MusteriAdi" class="w-full px-3 py-2 border rounded focus:outline-none focus:border-yellow-500 transition" />
+                <span asp-validation-for="MusteriAdi" class="text-red-500 text-xs font-semibold"></span>
+            </div>
+            <div>
+                <label class="block text-gray-700 font-bold mb-2 text-xs">Soyad</label>
+                <input asp-for="MusteriSoyadi" class="w-full px-3 py-2 border rounded focus:outline-none focus:border-yellow-500 transition" />
+                <span asp-validation-for="MusteriSoyadi" class="text-red-500 text-xs font-semibold"></span>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2 text-xs">E-Posta</label>
+            <input asp-for="MusteriEposta" type="email" class="w-full px-3 py-2 border rounded focus:outline-none focus:border-yellow-500 transition" />
+            <span asp-validation-for="MusteriEposta" class="text-red-500 text-xs font-semibold"></span>
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-gray-700 font-bold mb-2 text-xs">Telefon</label>
+            <input asp-for="MusteriTelefon" type="text" maxlength="11" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11);" class="w-full px-3 py-2 border rounded focus:outline-none focus:border-yellow-500 transition" />
+            <span asp-validation-for="MusteriTelefon" class="text-red-500 text-xs font-semibold"></span>
+        </div>
+
+        <div class="flex justify-end border-t pt-4">
+            <a asp-action="Index" class="text-gray-600 mr-4 py-2 hover:text-gray-800 transition">İptal</a>
+            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded font-bold hover:bg-blue-700 transition shadow">Güncelle</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

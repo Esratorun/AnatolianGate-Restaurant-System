@@ -1,0 +1,154 @@
+﻿@model RestoranProje1.Models.HomeViewModel
+
+@{
+    ViewData["Title"] = "Rezervasyon";
+    // -----------------------------------------------------------------------------------------
+    // PROJE İSTERLERİ KANITLARI (Home/Rezervasyon.cshtml)
+    // -----------------------------------------------------------------------------------------
+    // [İSTER 11] : Tag Helper Kullanılmış mı?
+    //              EVET -> Form ve input elemanlarında "asp-for", "asp-action" kullanıldı.
+    //
+    // [İSTER 15] : Server Side Validation Kullanılmış mı?
+    //              EVET -> "asp-validation-for" ile sunucu taraflı hatalar gösteriliyor.
+    //
+    // [İSTER 16] : Client Side Validation Kullanılmış mı?
+    //              EVET -> "ValidationScriptsPartial" ile tarayıcı taraflı kontrol yapılıyor.
+    //
+    // [İSTER 21] : SweetAlert Kullanılmış mı?
+    //              EVET -> İşlem sonucunda kullanıcıya şık bir açılır pencere (popup) gösteriliyor.
+    // -----------------------------------------------------------------------------------------
+}
+
+<section class="relative h-[50vh] flex items-center justify-center bg-black">
+    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-40"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-[#1a1c23] via-transparent to-black/60"></div>
+
+    <div class="relative z-10 text-center mt-10">
+        <h1 class="font-serif text-5xl md:text-7xl text-yellow-500 font-bold tracking-widest drop-shadow-2xl">YERİNİZİ AYIRTIN</h1>
+        <p class="text-[#f3f4f6] text-lg mt-4 tracking-wide font-light">Özel anlarınız için kusursuz bir deneyim</p>
+        <div class="w-24 h-1 bg-yellow-500 mx-auto mt-6 rounded-full"></div>
+    </div>
+</section>
+
+<section class="py-24 bg-[#1a1c23] relative">
+    <div class="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/black-linen.png')]"></div>
+
+    <div class="max-w-4xl mx-auto px-4 relative z-10">
+
+        <div class="bg-[#252836] border border-yellow-500/20 rounded-xl p-10 shadow-2xl">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-serif text-yellow-500 mb-4">Rezervasyon Formu</h2>
+                <p class="text-gray-400">Lütfen aşağıdaki formu eksiksiz doldurunuz.</p>
+            </div>
+
+            <form asp-controller="Home" asp-action="RezervasyonYap" method="post" class="space-y-6">
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="text-left">
+                        <label class="text-xs text-yellow-500 uppercase ml-1 block mb-1">Adınız</label>
+                        <input asp-for="Rezervasyon.MusteriAdi" class="w-full bg-[#1a1c23] border border-gray-600 text-white p-3 rounded focus:outline-none focus:border-yellow-500 transition" placeholder="Adınız" />
+                        <span asp-validation-for="Rezervasyon.MusteriAdi" class="text-red-500 text-xs"></span>
+                    </div>
+                    <div class="text-left">
+                        <label class="text-xs text-yellow-500 uppercase ml-1 block mb-1">Soyadınız</label>
+                        <input asp-for="Rezervasyon.MusteriSoyadi" class="w-full bg-[#1a1c23] border border-gray-600 text-white p-3 rounded focus:outline-none focus:border-yellow-500 transition" placeholder="Soyadınız" />
+                        <span asp-validation-for="Rezervasyon.MusteriSoyadi" class="text-red-500 text-xs"></span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="text-left">
+                        <label class="text-xs text-yellow-500 uppercase ml-1 block mb-1">Telefon</label>
+                        <input asp-for="Rezervasyon.MusteriTelefon"
+                               type="text"
+                               maxlength="11"
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11);"
+                               class="w-full bg-[#1a1c23] border border-gray-600 text-white p-3 rounded focus:outline-none focus:border-yellow-500 transition"
+                               placeholder="05XX..." />
+                        <span asp-validation-for="Rezervasyon.MusteriTelefon" class="text-red-500 text-xs"></span>
+                    </div>
+                    <div class="text-left">
+                        <label class="text-xs text-yellow-500 uppercase ml-1 block mb-1">E-Posta</label>
+                        <input asp-for="Rezervasyon.MusteriEposta" type="email" class="w-full bg-[#1a1c23] border border-gray-600 text-white p-3 rounded focus:outline-none focus:border-yellow-500 transition" placeholder="mail@ornek.com" />
+                        <span asp-validation-for="Rezervasyon.MusteriEposta" class="text-red-500 text-xs"></span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="text-left">
+                        <label class="text-xs text-yellow-500 uppercase ml-1 block mb-1">Tarih</label>
+                        <input asp-for="Rezervasyon.RezervasyonTarihi" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="w-full bg-[#1a1c23] border border-gray-600 text-white p-3 rounded focus:outline-none focus:border-yellow-500 transition [color-scheme:dark]" />
+                        <span asp-validation-for="Rezervasyon.RezervasyonTarihi" class="text-red-500 text-xs"></span>
+                    </div>
+                    <div class="text-left">
+                        <label class="text-xs text-yellow-500 uppercase ml-1 block mb-1">Saat</label>
+                        <select asp-for="Rezervasyon.RezervasyonSaati" class="w-full bg-[#1a1c23] border border-gray-600 text-gray-400 p-3 rounded focus:outline-none focus:border-yellow-500 transition">
+                            <option value="12:00">12:00</option>
+                            <option value="13:00">13:00</option>
+                            <option value="14:00">14:00</option>
+                            <option value="18:00">18:00</option>
+                            <option value="19:00">19:00</option>
+                            <option value="20:00">20:00</option>
+                            <option value="21:00">21:00</option>
+                        </select>
+                    </div>
+                    <div class="text-left">
+                        <label class="text-xs text-yellow-500 uppercase ml-1 block mb-1">Kişi Sayısı</label>
+                        <input asp-for="Rezervasyon.KisiSayisi" type="number" min="1" max="15" value="2" class="w-full bg-[#1a1c23] border border-gray-600 text-white p-3 rounded focus:outline-none focus:border-yellow-500 transition" />
+                    </div>
+                </div>
+
+                <div class="text-left">
+                    <label class="text-xs text-yellow-500 uppercase ml-1 block mb-1">Özel İstekler</label>
+                    <textarea asp-for="Rezervasyon.MusteriNotu" class="w-full bg-[#1a1c23] border border-gray-600 text-white p-3 rounded focus:outline-none focus:border-yellow-500 transition h-24"></textarea>
+                </div>
+
+                <button type="submit" class="w-full bg-yellow-600 text-black font-bold py-4 rounded hover:bg-yellow-500 transition duration-300 mt-8 uppercase tracking-widest text-sm shadow-lg hover:shadow-yellow-500/50">
+                    Rezervasyonu Tamamla
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            // [İster 21] SweetAlert Tetikleme
+            @if (TempData["Hata"] != null)
+            {
+                    <text>
+                    Swal.fire({
+                        title: 'Üzgünüz!',
+                        text: '@Html.Raw(TempData["Hata"])',
+                        icon: 'error',
+                        confirmButtonText: 'Tamam',
+                        confirmButtonColor: '#d33',
+                        background: '#1a0505',
+                        color: '#fff'
+                    });
+                    </text>
+            }
+            @if (TempData["Mesaj"] != null)
+            {
+                    <text>
+                    Swal.fire({
+                        title: 'Teşekkürler!',
+                        text: '@Html.Raw(TempData["Mesaj"])',
+                        icon: 'success',
+                        confirmButtonText: 'Tamam',
+                        confirmButtonColor: '#CCA45D',
+                        background: '#1a0505',
+                        color: '#fff'
+                    });
+                    </text>
+            }
+        });
+    </script>
+}

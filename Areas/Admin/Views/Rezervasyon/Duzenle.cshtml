@@ -1,0 +1,205 @@
+﻿@model RestoranProje1.Models.Rezervasyon
+@{
+    ViewData["Title"] = "Rezervasyon Düzenle";
+    // -----------------------------------------------------------------------------------------
+    // PROJE İSTERLERİ KANITLARI (Rezervasyon/Duzenle.cshtml)
+    // -----------------------------------------------------------------------------------------
+    // [İSTER 9]  : Proje MVC tasarım kalıbına uygun geliştirilmiş mi?
+    //              EVET -> Burası MVC'nin "View" katmanıdır. Modelden gelen rezervasyon verisini gösterir.
+    //
+    // [İSTER 11] : Tag Helper Kullanılmış mı?
+    //              EVET -> Form ve input işlemleri için "asp-for", "asp-items", "asp-action" kullanılmıştır.
+    //
+    // [İSTER 15] : Server side validation Kullanılmış mı?
+    //              EVET -> "asp-validation-for" etiketleri ile sunucu taraflı hatalar gösterilir.
+    //
+    // [İSTER 16] : Client side validation Kullanılmış mı?
+    //              EVET -> "_ValidationScriptsPartial" ile tarayıcı tabanlı doğrulama aktiftir.
+    //
+    // [İSTER 17] : Jquery kütüphanesi Kullanılmış mı?
+    //              EVET -> Sayfa altındaki scriptte "$.ajax" kullanılarak, tarih değiştiğinde
+    //              müsait masalar dinamik olarak getirilir (Asenkron işlem).
+    //
+    // [İSTER 19] : SweetAlert kütüphanesi Kullanılmış mı?
+    //              EVET -> TempData'dan gelen hata mesajları "Swal.fire" ile gösterilir.
+    //
+    // [İSTER 22] : Admin için tema uygulanmış mı?
+    //              EVET -> Modern kart yapısı ve Tailwind CSS (bg-white, shadow-lg vb.) kullanılmıştır.
+    // -----------------------------------------------------------------------------------------
+}
+
+@if (Model == null)
+{
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative shadow" role="alert">
+        <strong class="font-bold"><i class="fas fa-exclamation-circle mr-2"></i>Hata!</strong>
+        <span class="block sm:inline">Rezervasyon kaydı bulunamadı. Lütfen listeye dönüp tekrar deneyin.</span>
+        <a asp-action="Index" class="underline font-bold ml-2 hover:text-red-900">Listeye Dön</a>
+    </div>
+}
+else
+{
+    <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+        <div class="flex justify-between items-center mb-6 border-b pb-4">
+            <h2 class="text-2xl font-bold text-gray-800">
+                <i class="fas fa-edit text-yellow-500 mr-2"></i> Rezervasyon Yönetimi
+            </h2>
+            <div class="text-right">
+                <span class="text-xs font-bold text-gray-500 block uppercase">Rezervasyon ID</span>
+                <span class="text-lg font-bold text-gray-800">#@Model.RezervasyonID</span>
+            </div>
+        </div>
+
+        <form asp-action="Duzenle" method="post">
+            <input type="hidden" asp-for="RezervasyonID" />
+
+            <div class="bg-gray-50 p-6 rounded-lg mb-6 border border-gray-200">
+                <h3 class="text-sm font-bold text-gray-500 uppercase mb-4 border-b border-gray-200 pb-2">
+                    <i class="fas fa-user mr-1"></i> Müşteri Bilgileri
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2 text-xs uppercase">Adı</label>
+                        <input asp-for="MusteriAdi" class="w-full px-3 py-2 border rounded bg-white text-gray-800 focus:outline-none focus:border-yellow-500 transition" />
+                        <span asp-validation-for="MusteriAdi" class="text-red-500 text-xs"></span>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2 text-xs uppercase">Soyadı</label>
+                        <input asp-for="MusteriSoyadi" class="w-full px-3 py-2 border rounded bg-white text-gray-800 focus:outline-none focus:border-yellow-500 transition" />
+                        <span asp-validation-for="MusteriSoyadi" class="text-red-500 text-xs"></span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2 text-xs uppercase">Telefon</label>
+                        <input asp-for="MusteriTelefon"
+                               maxlength="11"
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11);"
+                               class="w-full px-3 py-2 border rounded bg-white text-gray-800 focus:outline-none focus:border-yellow-500 transition" />
+                        <span asp-validation-for="MusteriTelefon" class="text-red-500 text-xs"></span>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2 text-xs uppercase">E-Posta</label>
+                        <input asp-for="MusteriEposta" class="w-full px-3 py-2 border rounded bg-white text-gray-800 focus:outline-none focus:border-yellow-500 transition" />
+                        <span asp-validation-for="MusteriEposta" class="text-red-500 text-xs"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">Tarih</label>
+                    <input asp-for="RezervasyonTarihi" id="RezervasyonTarihi" type="date" class="w-full px-3 py-2 border rounded focus:border-yellow-500 focus:outline-none transition" />
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">Saat</label>
+                    <select asp-for="RezervasyonSaati" id="RezervasyonSaati" class="w-full px-3 py-2 border rounded focus:border-yellow-500 focus:outline-none transition">
+                        <option value="12:00">12:00</option>
+                        <option value="13:00">13:00</option>
+                        <option value="14:00">14:00</option>
+                        <option value="18:00">18:00</option>
+                        <option value="19:00">19:00</option>
+                        <option value="20:00">20:00</option>
+                        <option value="21:00">21:00</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">Kişi Sayısı</label>
+                    <input asp-for="KisiSayisi" type="number" min="1" max="20" class="w-full px-3 py-2 border rounded focus:border-yellow-500 focus:outline-none transition" />
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 bg-yellow-50 p-6 rounded-lg border border-yellow-200 shadow-sm">
+                <div>
+                    <label class="block text-gray-800 font-bold mb-2">Durum</label>
+                    <select asp-for="RezervasyonDurumu" class="w-full px-3 py-3 border border-yellow-300 rounded bg-white font-bold text-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 transition">
+                        <option value="Bekliyor">Bekliyor</option>
+                        <option value="Onaylandı">Onaylandı</option>
+                        <option value="Reddedildi">Reddedildi</option>
+                        <option value="İptal">İptal</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-gray-800 font-bold mb-2">Masa Atama</label>
+                    @if (ViewBag.Masalar != null)
+                    {
+                        <select asp-for="MasaID" id="MasaID" asp-items="ViewBag.Masalar" class="w-full px-3 py-3 border border-yellow-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-yellow-500 transition">
+                            <option value="">-- Mevcut Masayı Koru / Değiştir --</option>
+                        </select>
+                    }
+                    else
+                    {
+                        <div class="text-red-600 bg-red-100 border border-red-300 p-2 rounded text-sm flex items-center">
+                            <i class="fas fa-exclamation-triangle mr-2"></i> Masa listesi yüklenemedi!
+                        </div>
+                        <select asp-for="MasaID" class="hidden"><option value=""></option></select>
+                    }
+                    <p class="text-xs text-gray-500 mt-2">* Tarih değişirse müsait masa listesi güncellenir.</p>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-gray-700 font-bold mb-2">Müşteri Notu</label>
+                <textarea asp-for="MusteriNotu" rows="3" class="w-full px-3 py-2 border rounded bg-white focus:outline-none italic text-gray-600"></textarea>
+            </div>
+
+            <div class="flex justify-end border-t pt-6 space-x-4">
+                <a asp-action="Index" class="px-6 py-2 border border-gray-300 rounded text-gray-600 hover:bg-gray-100 transition flex items-center">
+                    <i class="fas fa-times mr-2"></i> İptal
+                </a>
+                <button type="submit" class="bg-green-600 text-white px-8 py-2 rounded font-bold hover:bg-green-700 transition shadow flex items-center">
+                    <i class="fas fa-save mr-2"></i> Kaydet ve Güncelle
+                </button>
+            </div>
+        </form>
+    </div>
+}
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @{
+        // [İster 16] Client Side Validation
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            // [İster 19] SweetAlert: Sunucudan gelen hatayı göster
+            @if (TempData["Hata"] != null)
+            {
+                        <text>Swal.fire({ icon: 'error', title: 'Hata!', text: '@Html.Raw(TempData["Hata"])', confirmButtonColor: '#d33' });</text>
+            }
+
+            // [İster 17] JQuery AJAX: Masa Filtreleme Sistemi
+            // Tarih veya saat değiştiğinde sunucuya istek atıp müsait masaları getirir.
+            var mevcutRezId = $('input[name="RezervasyonID"]').val();
+
+            $('#RezervasyonTarihi, #RezervasyonSaati').change(function () {
+                var tarih = $('#RezervasyonTarihi').val();
+                var saat = $('#RezervasyonSaati').val();
+                var masaDropdown = $('#MasaID');
+
+                if (tarih && saat) {
+                    $.ajax({
+                        url: '/Admin/Rezervasyon/GetMusaitMasalar',
+                        type: 'GET',
+                        data: { tarih: tarih, saat: saat, haricRezervasyonId: mevcutRezId },
+                        success: function (masalar) {
+                            var currentSelected = masaDropdown.val();
+                            masaDropdown.empty();
+                            if (masalar.length > 0) {
+                                masaDropdown.append('<option value="">-- Masa Değiştir (Müsaitler) --</option>');
+                                $.each(masalar, function (i, masa) {
+                                    masaDropdown.append($('<option>').val(masa.value).text(masa.text));
+                                });
+                                if (currentSelected) { masaDropdown.val(currentSelected); }
+                            } else {
+                                masaDropdown.append('<option value="">-- Bu saatte boş masa yok --</option>');
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

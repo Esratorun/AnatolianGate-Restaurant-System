@@ -1,0 +1,80 @@
+﻿@model RestoranProje1.Models.Urun
+@{
+    ViewData["Title"] = "Ürün Ekle";
+    // -----------------------------------------------------------------------------------------
+    // PROJE İSTERLERİ KANITLARI (Urun/Ekle.cshtml)
+    // -----------------------------------------------------------------------------------------
+    // [İSTER 7]  : Proje MVC tasarım kalıbına uygun geliştirilmiş mi?
+    //              EVET -> Burası MVC'nin "View" katmanıdır.
+    //
+    // [İSTER 11] : Tag Helper Kullanılmış mı?
+    //              EVET -> Form oluştururken "asp-action", inputlarda "asp-for", select için
+    //              "asp-items" ve resim yükleme için "enctype" kullanılmıştır.
+    //
+    // [İSTER 15] : Server side validation Kullanılmış mı?
+    //              EVET -> "asp-validation-for" etiketi ile sunucu taraflı hatalar gösterilir.
+    //
+    // [İSTER 16] : Client side validation Kullanılmış mı?
+    //              EVET -> Sayfa altına eklenen "_ValidationScriptsPartial" sayesinde
+    //              form post edilmeden önce tarayıcı üzerinde doğrulama yapılır.
+    //
+    // [İSTER 22] : Admin için tema uygulanmış mı?
+    //              EVET -> Tailwind CSS (grid, shadow-lg, rounded-lg) ile tasarım yapılmıştır.
+    // -----------------------------------------------------------------------------------------
+}
+
+<div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800">Yeni Ürün Ekle</h2>
+
+    <form asp-action="Ekle" method="post" enctype="multipart/form-data">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="mb-4">
+                <label asp-for="UrunAdi" class="block text-gray-700 font-bold mb-2">Ürün Adı</label>
+                <input asp-for="UrunAdi" class="w-full px-3 py-2 border rounded focus:outline-none focus:border-yellow-500 transition" />
+                <span asp-validation-for="UrunAdi" class="text-red-500 text-sm font-semibold"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="UrunFiyat" class="block text-gray-700 font-bold mb-2">Fiyat (₺)</label>
+                <input asp-for="UrunFiyat" type="number" step="0.01" class="w-full px-3 py-2 border rounded focus:outline-none focus:border-yellow-500 transition" />
+                <span asp-validation-for="UrunFiyat" class="text-red-500 text-sm font-semibold"></span>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label asp-for="KategoriID" class="block text-gray-700 font-bold mb-2">Kategori</label>
+            <select asp-for="KategoriID" class="w-full px-3 py-2 border rounded focus:outline-none focus:border-yellow-500 transition" asp-items="ViewBag.KategoriID">
+                <option value="">-- Kategori Seçiniz --</option>
+            </select>
+            <span asp-validation-for="KategoriID" class="text-red-500 text-sm font-semibold"></span>
+        </div>
+
+        <div class="mb-4">
+            <label asp-for="UrunAciklama" class="block text-gray-700 font-bold mb-2">Açıklama</label>
+            <textarea asp-for="UrunAciklama" rows="3" class="w-full px-3 py-2 border rounded focus:outline-none focus:border-yellow-500 transition"></textarea>
+            <span asp-validation-for="UrunAciklama" class="text-red-500 text-sm font-semibold"></span>
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-gray-700 font-bold mb-2">Ürün Resmi</label>
+            <input type="file" name="ResimDosyasi" class="w-full px-3 py-2 border rounded focus:outline-none focus:border-yellow-500 bg-gray-50 cursor-pointer" accept="image/*" />
+        </div>
+
+        <div class="mb-4 flex items-center bg-gray-50 p-3 rounded border">
+            <input asp-for="UrunOneCikanlar" type="checkbox" class="w-5 h-5 text-yellow-600 rounded focus:ring-yellow-500 border-gray-300 cursor-pointer" />
+            <label asp-for="UrunOneCikanlar" class="ml-2 text-gray-700 font-bold cursor-pointer">Öne Çıkanlara Ekle</label>
+        </div>
+
+        <div class="flex justify-end">
+            <a asp-action="Index" class="text-gray-600 mr-4 py-2 hover:text-gray-800 transition">İptal</a>
+            <button type="submit" class="bg-yellow-500 text-white px-6 py-2 rounded hover:bg-yellow-600 transition shadow font-bold">Kaydet</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

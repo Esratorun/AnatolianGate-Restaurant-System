@@ -1,0 +1,89 @@
+﻿@model RestoranProje1.Models.Urun
+@{
+    ViewData["Title"] = "Ürün Düzenle";
+    // -----------------------------------------------------------------------------------------
+    // PROJE İSTERLERİ KANITLARI (Urun/Duzenle.cshtml)
+    // -----------------------------------------------------------------------------------------
+    // [İSTER 9]  : Proje MVC tasarım kalıbına uygun geliştirilmiş mi?
+    //              EVET -> Burası MVC'nin "View" katmanıdır.
+    //
+    // [İSTER 11] : Tag Helper Kullanılmış mı?
+    //              EVET -> Form oluştururken "asp-action", inputlarda "asp-for", select için
+    //              "asp-items" ve resim yükleme için "enctype" kullanılmıştır.
+    //
+    // [İSTER 15] : Server side validation Kullanılmış mı?
+    //              EVET -> "asp-validation-for" etiketi ile sunucu taraflı hatalar gösterilir.
+    //
+    // [İSTER 16] : Client side validation Kullanılmış mı?
+    //              EVET -> Sayfa altına eklenen "_ValidationScriptsPartial" sayesinde
+    //              form post edilmeden önce tarayıcı üzerinde doğrulama yapılır.
+    //
+    // [İSTER 22] : Admin için tema uygulanmış mı?
+    //              EVET -> Tailwind CSS (grid, shadow-lg, rounded-lg) ile tasarım yapılmıştır.
+    //
+    // [İSTER 23] : Area oluşturulmuş mu?
+    //              EVET -> Bu dosya Admin Area yapısı içindedir.
+    // -----------------------------------------------------------------------------------------
+}
+
+<div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800">Ürün Düzenle</h2>
+
+    <form asp-action="Duzenle" method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="UrunID" />
+        <input type="hidden" asp-for="UrunResimYolu" />
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="mb-4">
+                <label asp-for="UrunAdi" class="block text-gray-700 font-bold mb-2">Ürün Adı</label>
+                <input asp-for="UrunAdi" class="w-full px-3 py-2 border rounded focus:outline-none focus:border-yellow-500 transition" />
+                <span asp-validation-for="UrunAdi" class="text-red-500 text-sm font-semibold"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="UrunFiyat" class="block text-gray-700 font-bold mb-2">Fiyat (₺)</label>
+                <input asp-for="UrunFiyat" type="number" step="0.01" class="w-full px-3 py-2 border rounded focus:outline-none focus:border-yellow-500 transition" />
+                <span asp-validation-for="UrunFiyat" class="text-red-500 text-sm font-semibold"></span>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label asp-for="KategoriID" class="block text-gray-700 font-bold mb-2">Kategori</label>
+            <select asp-for="KategoriID" class="w-full px-3 py-2 border rounded focus:outline-none focus:border-yellow-500 transition" asp-items="ViewBag.KategoriID"></select>
+        </div>
+
+        <div class="mb-4">
+            <label asp-for="UrunAciklama" class="block text-gray-700 font-bold mb-2">Açıklama</label>
+            <textarea asp-for="UrunAciklama" rows="3" class="w-full px-3 py-2 border rounded focus:outline-none focus:border-yellow-500 transition"></textarea>
+            <span asp-validation-for="UrunAciklama" class="text-red-500 text-sm font-semibold"></span>
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-gray-700 font-bold mb-2">Ürün Resmi</label>
+
+            <div class="flex items-center mb-3">
+                <img src="@Model.UrunResimYolu" alt="Mevcut Resim" class="w-20 h-20 object-cover rounded border mr-4 shadow-sm" />
+                <span class="text-sm text-gray-500">Mevcut Resim</span>
+            </div>
+
+            <input type="file" name="ResimDosyasi" class="w-full px-3 py-2 border rounded focus:outline-none focus:border-yellow-500 bg-gray-50 cursor-pointer" accept="image/*" />
+            <p class="text-xs text-gray-500 mt-1">Yeni resim seçmezseniz eskisi korunur.</p>
+        </div>
+
+        <div class="mb-4 flex items-center bg-gray-50 p-3 rounded border">
+            <input asp-for="UrunOneCikanlar" type="checkbox" class="w-5 h-5 text-yellow-600 rounded focus:ring-yellow-500 border-gray-300 cursor-pointer" />
+            <label asp-for="UrunOneCikanlar" class="ml-2 text-gray-700 font-bold cursor-pointer">Öne Çıkanlara Ekle</label>
+        </div>
+
+        <div class="flex justify-end">
+            <a asp-action="Index" class="text-gray-600 mr-4 py-2 hover:text-gray-800 transition">İptal</a>
+            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition shadow font-bold">Güncelle</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

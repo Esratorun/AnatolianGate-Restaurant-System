@@ -1,0 +1,138 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Anatolian Gate</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'anatolia-dark': '#1a0505',   // Ana arka plan (Koyu bordo/siyah)
+                        'anatolia-card': '#2A0A10',   // Kart arka planları
+                        'anatolia-gold': '#CCA45D',   // Vurgu rengi (Altın)
+                        'anatolia-cream': '#F5E6D3',  // Açık metin rengi
+                        'anatolia-gray': '#9CA3AF',   // Yardımcı metinler
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'], // Başlıklar için
+                        sans: ['"Lato"', 'sans-serif'],         // Düz metinler için
+                    },
+                    backgroundImage: {
+                        'hero-pattern': "url('https://images.unsplash.com/photo-1544148103-0773bf10d330?q=80&w=1470&auto=format&fit=crop')",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Özel Scrollbar Tasarımı */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a0505;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #CCA45D;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body class="bg-anatolia-dark text-white font-sans antialiased flex flex-col min-h-screen">
+
+    <nav class="absolute top-0 left-0 w-full z-50 bg-gradient-to-b from-black/90 to-transparent py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between">
+                <div class="flex-shrink-0">
+                    <a asp-controller="Home" asp-action="Index" class="font-serif text-2xl md:text-3xl text-anatolia-gold font-bold tracking-wider uppercase">
+                        Anatolian Gate
+                    </a>
+                </div>
+
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8 font-serif text-sm tracking-wide">
+                        <a asp-controller="Home" asp-action="Index" class="text-white hover:text-anatolia-gold transition duration-300">Ana Sayfa</a>
+                        <a asp-controller="Home" asp-action="Menu" class="text-white hover:text-anatolia-gold transition duration-300">Menü</a>
+                        <a asp-controller="Home" asp-action="Hikayemiz" class="text-white hover:text-anatolia-gold transition duration-300">Hikayemiz</a>
+                        <a asp-controller="Home" asp-action="Ascilar" class="text-white hover:text-anatolia-gold transition duration-300">Aşçılarımız</a>
+                        <a asp-controller="Home" asp-action="Rezervasyon" class="text-white hover:text-anatolia-gold transition duration-300">Rezervasyon</a>
+
+                        <a asp-controller="Home" asp-action="RezervasyonSorgula" class="text-white hover:text-anatolia-gold transition duration-300" title="Rezervasyon Durumu Sorgula">
+                            <i class="fas fa-search mr-1"></i> Rezervasyon Sorgula
+                        </a>
+
+                        <a asp-controller="Home" asp-action="Iletisim" class="text-white hover:text-anatolia-gold transition duration-300">İletişim</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main role="main" class="flex-grow">
+        @RenderBody()
+    </main>
+
+    <footer id="contact" class="bg-[#150404] py-16 border-t border-anatolia-gold/10 text-center md:text-left mt-auto">
+        <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-12 text-sm text-gray-500">
+            <div>
+                <h4 class="text-anatolia-gold font-serif text-xl mb-4">ANATOLIAN GATE</h4>
+                <p class="leading-relaxed">Osmanlı saraylarının asil tatlarını modern dokunuşlarla buluşturan benzersiz bir gastronomi deneyimi.</p>
+            </div>
+
+            <div>
+                <h4 class="text-anatolia-gold font-serif text-lg mb-4">İletişim</h4>
+                <div class="space-y-2">
+                    <p class="flex items-center justify-center md:justify-start"><span class="mr-2">📍</span> Nişantaşı Mahallesi, Vali Konağı Caddesi No: 42<br>Şişli, İstanbul</p>
+                    <p class="flex items-center justify-center md:justify-start"><span class="mr-2">📞</span> +90 (212) 122 45 67</p>
+                    <p class="flex items-center justify-center md:justify-start"><span class="mr-2">✉️</span> info@anatoliangate.com</p>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="text-anatolia-gold font-serif text-lg mb-4">Çalışma Saatleri</h4>
+                <div class="space-y-2">
+                    <p>Pazartesi - Cuma: 12:00 - 23:00</p>
+                    <p>Cumartesi - Pazar: 11:00 - 00:00</p>
+
+                    <div class="flex justify-center md:justify-start space-x-4 mt-4 text-xl">
+                        <a href="https://www.instagram.com/anatoliangaterestoran" target="_blank" class="hover:text-anatolia-gold flex items-center gap-2">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://x.com/anatoliangate" target="_blank" class="hover:text-anatolia-gold flex items-center gap-2">
+                            <i class="fab fa-x-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center text-xs text-gray-700 mt-16 border-t border-gray-900 pt-8">
+            &copy; 2025 Anatolian Gate. Tüm hakları saklıdır.
+            <a asp-controller="Account" asp-action="Login" class="ml-2 text-gray-800 hover:text-gray-600 transition" title="Yönetici Girişi">
+                <i class="fas fa-lock text-[10px]"></i>
+            </a>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

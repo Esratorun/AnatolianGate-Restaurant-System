@@ -1,0 +1,80 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Yeni Şifre Belirle";
+    // -----------------------------------------------------------------------------------------
+    // PROJE İSTERLERİ KANITLARI (Account/SifreYenile.cshtml)
+    // -----------------------------------------------------------------------------------------
+    // [İSTER 11] : Tag Helper Kullanılmış mı? EVET (asp-action).
+    // [İSTER 22] : Admin Teması uygulanmış mı? EVET (Tailwind Dark Mode).
+    // [İSTER 24] : Şifre güncelleme arayüzü mevcut mu? EVET.
+    // -----------------------------------------------------------------------------------------
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yeni Şifre - Anatolian Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-[#1a1c23] h-screen flex items-center justify-center font-sans">
+
+    <div class="w-full max-w-md p-8 space-y-6 bg-[#252836] rounded-xl shadow-2xl border border-gray-700">
+
+        <div class="text-center">
+            <div class="flex justify-center mb-4">
+                <i class="fas fa-unlock-alt text-4xl text-green-500"></i>
+            </div>
+            <h1 class="text-xl font-bold text-white uppercase tracking-wider">YENİ ŞİFRE BELİRLE</h1>
+            <p class="text-gray-400 mt-1 text-sm">İşlem yapılan kullanıcı:</p>
+            <p class="text-yellow-500 font-bold text-lg bg-gray-800 inline-block px-3 py-1 rounded mt-1 border border-yellow-500/30">
+                @ViewBag.Kadi
+            </p>
+        </div>
+
+        @if (TempData["Hata"] != null)
+        {
+            <div class="bg-red-500/20 border border-red-500 text-red-200 text-sm p-3 rounded text-center">
+                <i class="fas fa-exclamation-triangle mr-1"></i> @TempData["Hata"]
+            </div>
+        }
+
+        <form asp-action="SifreYenile" method="post" class="space-y-5">
+            <input type="hidden" name="kadi" value="@ViewBag.Kadi" />
+
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Yeni Şifre</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                        <i class="fas fa-key"></i>
+                    </span>
+                    <input type="password" name="yeniSifre" required minlength="3" placeholder="Yeni şifreniz..."
+                           class="w-full pl-10 px-4 py-3 bg-[#1a1c23] border border-gray-600 rounded text-white focus:outline-none focus:border-green-500 transition placeholder-gray-600" />
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Şifre Tekrar</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                        <i class="fas fa-check-double"></i>
+                    </span>
+                    <input type="password" name="sifreTekrar" required minlength="3" placeholder="Şifreyi tekrar giriniz..."
+                           class="w-full pl-10 px-4 py-3 bg-[#1a1c23] border border-gray-600 rounded text-white focus:outline-none focus:border-green-500 transition placeholder-gray-600" />
+                </div>
+            </div>
+
+            <button type="submit" class="w-full py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded transition duration-300 shadow-lg uppercase tracking-wide flex justify-center items-center gap-2">
+                <i class="fas fa-save"></i>
+                <span>Şifreyi Güncelle</span>
+            </button>
+        </form>
+
+        <div class="text-center mt-4 border-t border-gray-700 pt-4">
+            <a href="/" class="text-sm text-gray-500 hover:text-white transition">İptal Et ve Çık</a>
+        </div>
+    </div>
+</body>
+</html>

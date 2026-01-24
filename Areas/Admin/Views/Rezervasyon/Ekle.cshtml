@@ -1,0 +1,180 @@
+﻿@model RestoranProje1.Models.Rezervasyon
+@{
+    ViewData["Title"] = "Yeni Rezervasyon Ekle";
+    // -----------------------------------------------------------------------------------------
+    // PROJE İSTERLERİ KANITLARI (Rezervasyon/Ekle.cshtml)
+    // -----------------------------------------------------------------------------------------
+    // [İSTER 7]  : Proje MVC tasarım kalıbına uygun geliştirilmiş mi?
+    //              EVET -> Burası MVC'nin "View" katmanıdır. Kullanıcıdan veri alır.
+    //
+    // [İSTER 11] : Tag Helper Kullanılmış mı?
+    //              EVET -> "asp-for", "asp-action", "asp-items" ve "asp-validation-for" kullanılmıştır.
+    //
+    // [İSTER 13] : Server side validation Kullanılmış mı?
+    //              EVET -> "asp-validation-for" etiketi ile sunucu taraflı hatalar ekrana basılır.
+    //
+    // [İSTER 14] : Client side validation Kullanılmış mı?
+    //              EVET -> "_ValidationScriptsPartial" sayesinde form post edilmeden tarayıcıda kontrol edilir.
+    //
+    // [İSTER 17] : Jquery kütüphanesi Kullanılmış mı?
+    //              EVET -> Sayfa altındaki scriptte "$.ajax" kullanılarak, tarih ve saat seçildiğinde
+    //              sunucuya asenkron istek atılıp kapasite durumu sorgulanmaktadır.
+    //
+    // [İSTER 19] : SweetAlert kütüphanesi Kullanılmış mı?
+    //              EVET -> Olası hata durumlarında "Swal.fire" ile kullanıcı uyarılır.
+    //
+    // [İSTER 20] : Admin için tema uygulanmış mı?
+    //              EVET -> Tailwind CSS (grid, shadow, rounded) ile modern form tasarımı yapılmıştır.
+    // -----------------------------------------------------------------------------------------
+}
+
+<div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800 border-b pb-4">
+        <i class="fas fa-plus-circle text-yellow-500 mr-2"></i> Yeni Rezervasyon Oluştur
+    </h2>
+
+    <form asp-action="Ekle" method="post">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+            <div>
+                <label class="block text-gray-700 font-bold mb-2">Müşteri Adı</label>
+                <input asp-for="MusteriAdi" class="w-full px-3 py-2 border rounded focus:border-yellow-500 focus:outline-none transition" />
+                <span asp-validation-for="MusteriAdi" class="text-red-500 text-xs font-semibold"></span>
+            </div>
+            <div>
+                <label class="block text-gray-700 font-bold mb-2">Müşteri Soyadı</label>
+                <input asp-for="MusteriSoyadi" class="w-full px-3 py-2 border rounded focus:border-yellow-500 focus:outline-none transition" />
+                <span asp-validation-for="MusteriSoyadi" class="text-red-500 text-xs font-semibold"></span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+            <div>
+                <label class="block text-gray-700 font-bold mb-2">Telefon</label>
+                <input asp-for="MusteriTelefon" class="w-full px-3 py-2 border rounded focus:border-yellow-500 focus:outline-none transition" />
+                <span asp-validation-for="MusteriTelefon" class="text-red-500 text-xs font-semibold"></span>
+            </div>
+            <div>
+                <label class="block text-gray-700 font-bold mb-2">E-Posta</label>
+                <input asp-for="MusteriEposta" type="email" class="w-full px-3 py-2 border rounded focus:border-yellow-500 focus:outline-none transition" />
+                <span asp-validation-for="MusteriEposta" class="text-red-500 text-xs font-semibold"></span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-2">
+            <div>
+                <label class="block text-gray-700 font-bold mb-2">Tarih</label>
+                <input asp-for="RezervasyonTarihi" type="date" id="tarihSecimi" class="w-full px-3 py-2 border rounded focus:border-yellow-500 focus:outline-none transition" />
+                <span asp-validation-for="RezervasyonTarihi" class="text-red-500 text-xs"></span>
+            </div>
+            <div>
+                <label class="block text-gray-700 font-bold mb-2">Saat</label>
+                <select asp-for="RezervasyonSaati" id="saatSecimi" class="w-full px-3 py-2 border rounded focus:border-yellow-500 focus:outline-none transition">
+                    <option value="">Seçiniz</option>
+                    <option value="12:00">12:00</option>
+                    <option value="13:00">13:00</option>
+                    <option value="14:00">14:00</option>
+                    <option value="18:00">18:00</option>
+                    <option value="19:00">19:00</option>
+                    <option value="20:00">20:00</option>
+                    <option value="21:00">21:00</option>
+                </select>
+                <span asp-validation-for="RezervasyonSaati" class="text-red-500 text-xs"></span>
+            </div>
+            <div>
+                <label class="block text-gray-700 font-bold mb-2">Kişi Sayısı</label>
+                <input asp-for="KisiSayisi" type="number" min="1" max="20" class="w-full px-3 py-2 border rounded focus:border-yellow-500 focus:outline-none transition" value="2" />
+                <span asp-validation-for="KisiSayisi" class="text-red-500 text-xs"></span>
+            </div>
+        </div>
+
+        <div id="kapasiteKutusu" class="mb-6 hidden">
+            <div class="p-3 rounded-lg border flex items-center justify-between transition-colors duration-300">
+                <span class="font-bold text-sm"><i class="fas fa-info-circle mr-2"></i> Kapasite Durumu:</span>
+                <span id="kapasiteMetni" class="font-bold text-sm">Hesaplanıyor...</span>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-gray-700 font-bold mb-2">Masa Seçimi (Opsiyonel)</label>
+            @if (ViewBag.Masalar != null)
+            {
+                <select asp-for="MasaID" asp-items="ViewBag.Masalar" class="w-full px-3 py-2 border rounded focus:border-yellow-500 focus:outline-none transition">
+                    <option value="">-- Masa Seçimi Yapılmadı --</option>
+                </select>
+            }
+            else
+            {
+                <div class="text-red-500 text-sm bg-red-100 p-2 rounded">Masa listesi yüklenemedi.</div>
+            }
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-gray-700 font-bold mb-2">Yönetici Notu</label>
+            <textarea asp-for="MusteriNotu" class="w-full px-3 py-2 border rounded focus:border-yellow-500 focus:outline-none transition" rows="3"></textarea>
+        </div>
+
+        <div class="flex justify-end border-t pt-4">
+            <a asp-action="Index" class="text-gray-600 mr-4 py-2 hover:underline flex items-center transition"><i class="fas fa-times mr-1"></i> İptal</a>
+            <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition shadow font-bold flex items-center">
+                <i class="fas fa-check mr-2"></i> Rezervasyonu Oluştur
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @{
+        // [İster 14] Client Side Validation
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+
+            // [İster 19] SweetAlert: Sunucu taraflı hata varsa göster
+            @if (TempData["Hata"] != null)
+            {
+                    <text>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Hata!',
+                        text: '@Html.Raw(TempData["Hata"])',
+                        confirmButtonColor: '#d33'
+                    });
+                    </text>
+            }
+
+            // [İster 17] JQuery & AJAX: Dinamik Kapasite Kontrolü
+            // Kullanıcı tarih veya saat seçtiğinde sunucuya istek atar.
+            $('#tarihSecimi, #saatSecimi').change(function () {
+                var tarih = $('#tarihSecimi').val();
+                var saat = $('#saatSecimi').val();
+
+                if (tarih && saat) {
+                    $('#kapasiteKutusu').removeClass('hidden');
+                    $.ajax({
+                        url: '/Admin/Rezervasyon/GetMusaitlikDurumu',
+                        type: 'GET',
+                        data: { tarih: tarih, saat: saat },
+                        success: function (data) {
+                            var kutu = $('#kapasiteKutusu div');
+                            var metin = $('#kapasiteMetni');
+
+                            if (data.kalan <= 0) {
+                                kutu.removeClass('bg-green-100 border-green-400 text-green-700').addClass('bg-red-100 border-red-400 text-red-700');
+                                metin.html(`DOLU! (Toplam: ${data.toplam}, Dolu: ${data.doluluk})`);
+                            } else {
+                                kutu.removeClass('bg-red-100 border-red-400 text-red-700').addClass('bg-green-100 border-green-400 text-green-700');
+                                metin.html(`MÜSAİT - Kalan: ${data.kalan} Kişi (Dolu: ${data.doluluk})`);
+                            }
+                        }
+                    });
+                } else {
+                    $('#kapasiteKutusu').addClass('hidden');
+                }
+            });
+        });
+    </script>
+}

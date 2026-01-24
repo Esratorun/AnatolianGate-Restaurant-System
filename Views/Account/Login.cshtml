@@ -1,0 +1,84 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Giriş Yap";
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Giriş Yap - Anatolian Gate</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-[#1a1c23] h-screen flex items-center justify-center font-sans">
+
+    <div class="w-full max-w-md p-8 space-y-6 bg-[#252836] rounded-xl shadow-2xl border border-gray-700">
+
+        <div class="text-center">
+            <div class="flex justify-center mb-4">
+                <i class="fas fa-user-circle text-5xl text-yellow-500"></i>
+            </div>
+            <h1 class="text-2xl font-bold text-yellow-500 tracking-widest uppercase">GİRİŞ YAP</h1>
+            <p class="text-gray-400 mt-2 text-sm">Yönetim paneline erişmek için giriş yapınız.</p>
+        </div>
+
+        @if (TempData["Hata"] != null)
+        {
+            <div class="bg-red-500/20 border border-red-500 text-red-200 text-sm p-3 rounded text-center">
+                <i class="fas fa-exclamation-circle mr-1"></i> @TempData["Hata"]
+            </div>
+        }
+
+        <form asp-action="Login" method="post" class="space-y-6">
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Kullanıcı Adı</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                        <i class="fas fa-user"></i>
+                    </span>
+                    <input type="text" name="kadi" required autocomplete="off"
+                           class="w-full pl-10 px-4 py-3 bg-[#1a1c23] border border-gray-600 rounded text-white focus:outline-none focus:border-yellow-500 transition placeholder-gray-600"
+                           placeholder="Kullanıcı adınız..." />
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Şifre</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                        <i class="fas fa-lock"></i>
+                    </span>
+                    <input type="password" name="sifre" required
+                           class="w-full pl-10 px-4 py-3 bg-[#1a1c23] border border-gray-600 rounded text-white focus:outline-none focus:border-yellow-500 transition placeholder-gray-600"
+                           placeholder="••••••" />
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between text-sm">
+                <div class="flex items-center">
+                    <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-yellow-600 focus:ring-yellow-500 border-gray-300 rounded bg-[#1a1c23]">
+                    <label for="remember-me" class="ml-2 block text-gray-400">Beni Hatırla</label>
+                </div>
+                <div class="text-sm">
+                    <a asp-action="SifremiUnuttum" class="font-medium text-yellow-500 hover:text-yellow-400 transition">
+                        Şifremi Unuttum?
+                    </a>
+                </div>
+            </div>
+
+            <button type="submit" class="w-full py-3 bg-yellow-600 hover:bg-yellow-700 text-white font-bold rounded transition duration-300 shadow-lg uppercase tracking-wide flex justify-center items-center gap-2">
+                <span>Giriş Yap</span>
+                <i class="fas fa-sign-in-alt"></i>
+            </button>
+        </form>
+
+        <div class="text-center mt-4 border-t border-gray-700 pt-4">
+            <a href="/" class="text-sm text-gray-500 hover:text-yellow-500 transition flex justify-center items-center gap-2">
+                <i class="fas fa-home"></i> Siteye Dön
+            </a>
+        </div>
+    </div>
+</body>
+</html>

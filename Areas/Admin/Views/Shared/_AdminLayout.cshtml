@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Yönetim Paneli</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head>
+<body class="bg-gray-100 font-sans antialiased">
+
+    <div class="flex h-screen overflow-hidden">
+
+        <aside class="w-64 bg-gray-900 text-white flex flex-col shadow-xl">
+            <div class="h-16 flex items-center justify-center border-b border-gray-800">
+                <span class="text-xl font-bold text-yellow-500 tracking-wider">ANATOLIAN ADMIN</span>
+            </div>
+
+            <nav class="flex-1 px-2 py-4 space-y-2 overflow-y-auto">
+                <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded transition-colors">
+                    <i class="fas fa-chart-pie w-6"></i>
+                    <span class="ml-2">Anasayfa</span>
+                </a>
+
+                <p class="px-4 text-xs font-semibold text-gray-500 uppercase mt-4 mb-2">YÖNETİM</p>
+
+                <a asp-area="Admin" asp-controller="Kategori" asp-action="Index" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded transition-colors">
+                    <i class="fas fa-list w-6"></i>
+                    <span class="ml-2">Kategoriler</span>
+                </a>
+
+                <a asp-area="Admin" asp-controller="Masalar" asp-action="Index" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded transition-colors">
+                    <i class="fas fa-chair w-6"></i>
+                    <span class="ml-2">Masalar</span>
+                </a>
+
+                <a asp-area="Admin" asp-controller="Urun" asp-action="Index" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded transition-colors">
+                    <i class="fas fa-utensils w-6"></i>
+                    <span class="ml-2">Menü / Ürünler</span>
+                </a>
+
+                <a asp-area="Admin" asp-controller="Ascilar" asp-action="Index" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded transition-colors">
+                    <i class="fas fa-users w-6"></i>
+                    <span class="ml-2">Aşçılar</span>
+                </a>
+
+                <p class="px-4 text-xs font-semibold text-gray-500 uppercase mt-4 mb-2">İŞLEMLER</p>
+
+                <a asp-area="Admin" asp-controller="Musteriler" asp-action="Index" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded transition-colors">
+                    <i class="fas fa-user-friends w-6"></i>
+                    <span class="ml-2">Müşteriler</span>
+                </a>
+
+                <a asp-area="Admin" asp-controller="Rezervasyon" asp-action="Index" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded transition-colors">
+                    <i class="fas fa-calendar-check w-6"></i>
+                    <span class="ml-2">Rezervasyonlar</span>
+                </a>
+
+                <a asp-area="Admin" asp-controller="Mesajlar" asp-action="Index" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded transition-colors">
+                    <i class="fas fa-envelope w-6"></i>
+                    <span class="ml-2">Gelen Mesajlar</span>
+                </a>
+
+                <a href="/" target="_blank" class="flex items-center px-4 py-3 text-yellow-500 hover:bg-gray-800 hover:text-yellow-400 rounded transition-colors mt-4">
+                    <i class="fas fa-external-link-alt w-6"></i>
+                    <span class="ml-2">Siteyi Görüntüle</span>
+                </a>
+            </nav>
+
+            <div class="p-4 border-t border-gray-800">
+                <a asp-area="" asp-controller="Account" asp-action="Logout" class="flex items-center w-full px-4 py-2 text-sm text-white bg-red-600 rounded hover:bg-red-700 transition">
+                    <i class="fas fa-sign-out-alt w-5"></i>
+                    <span class="ml-2">Güvenli Çıkış</span>
+                </a>
+            </div>
+        </aside>
+
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <header class="h-16 bg-white shadow flex items-center justify-between px-6 z-10">
+                <h2 class="text-xl font-semibold text-gray-800">@ViewData["Title"]</h2>
+
+                <div class="flex items-center">
+                    <span class="text-gray-600 mr-3 text-sm">Hoşgeldin, <span class="font-bold text-gray-900">Yönetici</span></span>
+                    <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-gray-600"></i>
+                    </div>
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

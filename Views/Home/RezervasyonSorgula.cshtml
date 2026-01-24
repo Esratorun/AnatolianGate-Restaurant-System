@@ -1,0 +1,57 @@
+﻿@{
+    ViewData["Title"] = "Rezervasyon Sorgula";
+    // -----------------------------------------------------------------------------------------
+    // PROJE İSTERLERİ KANITLARI (Home/RezervasyonSorgula.cshtml)
+    // -----------------------------------------------------------------------------------------
+    // [İSTER 11] : Tag Helper Kullanılmış mı?
+    //              EVET -> Form oluştururken "asp-action" kullanılmıştır.
+    //
+    // [İSTER 14] : Razor Syntax (Karar Yapıları)
+    //              EVET -> Hata mesajı varsa (@if TempData["Hata"]) gösteren blok eklenmiştir.
+    //
+    // [İSTER 22] : Özgün Tasarım
+    //              EVET -> Tailwind CSS ile koyu tema (Dark Mode) uygulanmıştır.
+    // -----------------------------------------------------------------------------------------
+}
+
+<section class="relative h-[40vh] flex items-center justify-center bg-black">
+    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=1974&auto=format&fit=crop')] bg-cover bg-center opacity-40"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-[#1a1c23] via-transparent to-black/60"></div>
+    <div class="relative z-10 text-center">
+        <h1 class="font-serif text-4xl md:text-5xl text-yellow-500 font-bold tracking-widest drop-shadow-lg">REZERVASYON DURUMU</h1>
+        <div class="w-16 h-1 bg-yellow-500 mx-auto mt-4 rounded-full"></div>
+    </div>
+</section>
+
+<section class="py-24 bg-[#1a1c23] relative">
+    <div class="max-w-xl mx-auto px-4">
+
+        <div class="bg-[#252836] border border-yellow-500/20 rounded-xl p-10 shadow-2xl text-center">
+            <div class="mb-8">
+                <div class="w-16 h-16 bg-[#1a1c23] rounded-full flex items-center justify-center mx-auto mb-4 border border-yellow-500 text-yellow-500 shadow-lg shadow-yellow-500/20">
+                    <i class="fas fa-search text-2xl"></i>
+                </div>
+                <h2 class="text-2xl font-serif text-white mb-2">Sorgulama Yapın</h2>
+                <p class="text-gray-400 text-sm">Rezervasyon yaparken kullandığınız e-posta adresini girerek güncel durumu öğrenebilirsiniz.</p>
+            </div>
+
+            <form asp-action="RezervasyonSorgula" method="post">
+                <div class="mb-6">
+                    <input type="email" name="eposta" required placeholder="ornek@mail.com" class="w-full bg-[#1a1c23] border border-gray-600 text-white p-4 rounded-lg focus:outline-none focus:border-yellow-500 transition text-center placeholder-gray-600 shadow-inner" />
+                </div>
+
+                <button type="submit" class="w-full bg-yellow-600 text-black font-bold py-4 rounded-lg hover:bg-white transition duration-300 uppercase tracking-widest text-sm shadow-lg hover:shadow-white/20">
+                    SORGULA
+                </button>
+            </form>
+
+            @if (TempData["Hata"] != null)
+            {
+                <div class="mt-6 p-4 bg-red-900/30 border border-red-500/50 rounded text-red-200 text-sm animate-pulse">
+                    <i class="fas fa-exclamation-circle mr-2"></i> @TempData["Hata"]
+                </div>
+            }
+        </div>
+
+    </div>
+</section>

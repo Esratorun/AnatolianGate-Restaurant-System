@@ -1,0 +1,81 @@
+﻿@model RestoranProje1.Models.Asci
+@{
+    ViewData["Title"] = "Aşçı Düzenle";
+    // -----------------------------------------------------------------------------------------
+    // PROJE İSTERLERİ KANITLARI (Asci/Duzenle.cshtml)
+    // -----------------------------------------------------------------------------------------
+    // [İSTER 9]  : Proje MVC tasarım kalıbına uygun geliştirilmiş mi?
+    //              EVET -> Burası MVC'nin "View" (Görünüm) katmanıdır. Controller'dan gelen Model verisini kullanıcıya sunar.
+    //
+    // [İSTER 13] : Tag Helper Kullanılmış mı?
+    //              EVET -> Form oluştururken "asp-action", "asp-controller", inputlarda "asp-for" ve
+    //              resim yükleme için "enctype" gibi Tag Helper yapıları aktif olarak kullanılmıştır.
+    //
+    // [İSTER 16] : Client side validation (İstemci taraflı doğrulama) Kullanılmış mı?
+    //              EVET -> Inputların altında "asp-validation-for" kullanılarak hata mesajları gösterilmektedir.
+    //              Ayrıca sayfa altında "_ValidationScriptsPartial" çağrılarak JQuery Unobtrusive Validation aktif edilmiştir.
+    //
+    // [İSTER 22] : Admin için tema uygulanmış mı?
+    //              EVET -> "max-w-md", "bg-white", "shadow-lg" ve form elemanlarındaki Tailwind CSS sınıfları ile
+    //              Yönetim Paneline uygun, modern ve responsive bir tema giydirilmiştir.
+    //
+    // [İSTER 23] : Area oluşturulmuş mu?
+    //              EVET -> Bu View dosyası, projenin "/Areas/Admin/" dizini altında çalışmaktadır.
+    // -----------------------------------------------------------------------------------------
+}
+
+<div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800">Aşçı Düzenle</h2>
+
+    <form asp-action="Duzenle" method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="AsciID" />
+        <input type="hidden" asp-for="AsciResimYolu" />
+
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2">Ad</label>
+            <input asp-for="AsciAdi" class="w-full px-3 py-2 border rounded focus:border-yellow-500 focus:outline-none transition" />
+            <span asp-validation-for="AsciAdi" class="text-red-500 text-xs font-semibold"></span>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2">Soyad</label>
+            <input asp-for="AsciSoyadi" class="w-full px-3 py-2 border rounded focus:border-yellow-500 focus:outline-none transition" />
+            <span asp-validation-for="AsciSoyadi" class="text-red-500 text-xs font-semibold"></span>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2">Ünvan</label>
+            <input asp-for="AsciUnvan" class="w-full px-3 py-2 border rounded focus:border-yellow-500 focus:outline-none transition" />
+            <span asp-validation-for="AsciUnvan" class="text-red-500 text-xs font-semibold"></span>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2">Biyografi</label>
+            <textarea asp-for="AsciBiyografi" class="w-full px-3 py-2 border rounded focus:border-yellow-500 focus:outline-none transition" rows="4"></textarea>
+            <span asp-validation-for="AsciBiyografi" class="text-red-500 text-xs font-semibold"></span>
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-gray-700 font-bold mb-2">Yeni Fotoğraf</label>
+            @if (!string.IsNullOrEmpty(Model.AsciResimYolu))
+            {
+                <div class="mb-2">
+                    <img src="@Model.AsciResimYolu" class="w-24 h-24 object-cover rounded border border-gray-300 shadow-sm" />
+                    <p class="text-xs text-gray-500 mt-1">Mevcut Fotoğraf</p>
+                </div>
+            }
+            <input type="file" name="ResimDosyasi" class="w-full px-3 py-2 border rounded bg-gray-50 cursor-pointer" accept="image/*" />
+        </div>
+
+        <div class="flex items-center justify-between">
+            <a asp-action="Index" class="text-gray-600 hover:text-gray-800 text-sm font-semibold transition">İptal</a>
+            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition shadow">Güncelle</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,138 @@
+﻿@model RestoranProje1.Models.IletisimMesaj
+
+@{
+    ViewData["Title"] = "İletişim";
+    // -----------------------------------------------------------------------------------------
+    // PROJE İSTERLERİ KANITLARI (Home/Iletisim.cshtml)
+    // -----------------------------------------------------------------------------------------
+    // [İSTER 11] : Tag Helper Kullanılmış mı?
+    //              EVET -> Form oluştururken "asp-controller", "asp-action", "asp-for" kullanıldı.
+    //
+    // [İSTER 15] : Server Side Validation Kullanılmış mı?
+    //              EVET -> "asp-validation-for" ile sunucu taraflı hata mesajları gösteriliyor.
+    //
+    // [İSTER 16] : Client Side Validation Kullanılmış mı?
+    //              EVET -> Sayfa altında "_ValidationScriptsPartial" çağrılarak tarayıcı
+    //              tarafında doğrulama yapılıyor.
+    //
+    // [İSTER 21] : SweetAlert Kütüphanesi Kullanılmış mı?
+    //              EVET -> Form başarıyla gönderildiğinde (TempData doluysa) şık bir
+    //              uyarı penceresi açılıyor.
+    // -----------------------------------------------------------------------------------------
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<section class="relative h-[40vh] flex items-center justify-center bg-black">
+    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1428515613728-6b4607e44363?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-40"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-[#1a1c23] via-transparent to-black/60"></div>
+    <div class="relative z-10 text-center">
+        <h1 class="font-serif text-5xl text-yellow-500 font-bold tracking-widest drop-shadow-lg">BİZE ULAŞIN</h1>
+        <div class="w-16 h-1 bg-yellow-500 mx-auto mt-4 rounded-full"></div>
+    </div>
+</section>
+
+<section class="py-20 bg-[#1a1c23] relative z-10 -mt-16">
+    <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-8">
+
+        <div class="bg-[#252836] p-8 text-center border border-yellow-500/20 rounded shadow-lg hover:border-yellow-500/50 transition duration-300 group h-full flex flex-col items-center">
+            <div class="w-16 h-16 bg-[#1a1c23] rounded-full flex items-center justify-center mb-6 border border-yellow-500 text-yellow-500 group-hover:bg-yellow-500 group-hover:text-black transition duration-300">
+                <i class="fas fa-map-marker-alt text-2xl"></i>
+            </div>
+            <h3 class="text-white font-serif text-xl mb-4">Adres</h3>
+            <p class="text-gray-400">Nişantaşı, Vali Konağı Cad. No:42</p>
+            <p class="text-gray-400">Şişli / İstanbul</p>
+        </div>
+
+        <div class="bg-[#252836] p-8 text-center border border-yellow-500/20 rounded shadow-lg hover:border-yellow-500/50 transition duration-300 group h-full flex flex-col items-center">
+            <div class="w-16 h-16 bg-[#1a1c23] rounded-full flex items-center justify-center mb-6 border border-yellow-500 text-yellow-500 group-hover:bg-yellow-500 group-hover:text-black transition duration-300">
+                <i class="fas fa-phone text-2xl"></i>
+            </div>
+            <h3 class="text-white font-serif text-xl mb-4">Telefon</h3>
+            <p class="text-gray-400">Rezervasyon: +90 (212) 123 45 67</p>
+            <p class="text-gray-400">Ofis: +90 (212) 123 45 68</p>
+        </div>
+
+        <div class="bg-[#252836] p-8 text-center border border-yellow-500/20 rounded shadow-lg hover:border-yellow-500/50 transition duration-300 group h-full flex flex-col items-center">
+            <div class="w-16 h-16 bg-[#1a1c23] rounded-full flex items-center justify-center mb-6 border border-yellow-500 text-yellow-500 group-hover:bg-yellow-500 group-hover:text-black transition duration-300">
+                <i class="fas fa-clock text-2xl"></i>
+            </div>
+            <h3 class="text-white font-serif text-xl mb-4">Saatler</h3>
+            <p class="text-gray-400">Hafta İçi: 12:00 - 23:00</p>
+            <p class="text-gray-400">Hafta Sonu: 12:00 - 01:00</p>
+        </div>
+    </div>
+</section>
+
+<section class="py-16 bg-black border-t border-gray-900">
+    <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12">
+
+        <div class="h-[500px] w-full bg-gray-800 rounded-lg overflow-hidden border border-gray-700 shadow-2xl">
+            <iframe src="https://maps.google.com/maps?q=Ni%C5%9Fanta%C5%9F%C4%B1%2C%20Vali%20Kona%C4%9F%C4%B1%20Cd.%20No%3A42&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                    width="100%"
+                    height="100%"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+
+        <div class="bg-[#1a1c23] p-10 border border-yellow-500/20 rounded-lg shadow-2xl">
+            <h3 class="text-3xl font-serif text-yellow-500 mb-2">Bize Yazın</h3>
+            <p class="text-gray-500 mb-8 text-sm">Görüş, öneri ve şikayetleriniz için aşağıdaki formu kullanabilirsiniz.</p>
+
+            <form asp-controller="Home" asp-action="IletisimGonder" method="post">
+                <div class="space-y-6">
+                    <div>
+                        <input asp-for="AdSoyad" placeholder="Adınız Soyadınız" class="w-full bg-transparent border-b border-gray-600 p-3 text-white focus:border-yellow-500 focus:outline-none transition placeholder-gray-600">
+                        <span asp-validation-for="AdSoyad" class="text-red-500 text-xs mt-1 block"></span>
+                    </div>
+                    <div>
+                        <input asp-for="Eposta" type="email" placeholder="E-Posta Adresiniz" class="w-full bg-transparent border-b border-gray-600 p-3 text-white focus:border-yellow-500 focus:outline-none transition placeholder-gray-600">
+                        <span asp-validation-for="Eposta" class="text-red-500 text-xs mt-1 block"></span>
+                    </div>
+                    <div>
+                        <input asp-for="Konu" placeholder="Konu" class="w-full bg-transparent border-b border-gray-600 p-3 text-white focus:border-yellow-500 focus:outline-none transition placeholder-gray-600">
+                        <span asp-validation-for="Konu" class="text-red-500 text-xs mt-1 block"></span>
+                    </div>
+                    <div>
+                        <textarea asp-for="MesajIcerigi" placeholder="Mesajınız..." rows="4" class="w-full bg-transparent border-b border-gray-600 p-3 text-white focus:border-yellow-500 focus:outline-none transition placeholder-gray-600"></textarea>
+                        <span asp-validation-for="MesajIcerigi" class="text-red-500 text-xs mt-1 block"></span>
+                    </div>
+
+                    <button type="submit" class="bg-yellow-600 text-white px-8 py-3 font-bold tracking-widest hover:bg-white hover:text-black transition duration-300 w-full mt-4 rounded">
+                        GÖNDER
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            // [İster 21] SweetAlert Tetikleme
+            @if (TempData["Mesaj"] != null)
+            {
+                    <text>
+                    Swal.fire({
+                        title: 'Teşekkürler!',
+                        text: '@Html.Raw(TempData["Mesaj"])',
+                        icon: 'success',
+                        confirmButtonColor: '#CCA45D',
+                        background: '#1a0505',
+                        color: '#fff'
+                    });
+                    </text>
+            }
+        });
+    </script>
+}

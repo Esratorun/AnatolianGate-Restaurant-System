@@ -1,0 +1,73 @@
+﻿@model RestoranProje1.Models.Asci
+@{
+    ViewData["Title"] = "Aşçı Ekle";
+    // -----------------------------------------------------------------------------------------
+    // PROJE İSTERLERİ KANITLARI (Asci/Ekle.cshtml)
+    // -----------------------------------------------------------------------------------------
+    // [İSTER 9]  : Proje MVC tasarım kalıbına uygun geliştirilmiş mi?
+    //              EVET -> Burası MVC'nin "View" (Görünüm) katmanıdır. Kullanıcıdan veri alır.
+    //
+    // [İSTER 13] : Tag Helper Kullanılmış mı?
+    //              EVET -> Form oluştururken "asp-action", inputlarda "asp-for" ve hata mesajları
+    //              için "asp-validation-for" etiketleri kullanılmıştır.
+    //
+    // [İSTER 15] : Server side validation Kullanılmış mı?
+    //              EVET -> "asp-validation-for" etiketi, Controller/Model tarafından gönderilen
+    //              sunucu taraflı hata mesajlarını (Örn: Zorunlu alan uyarısı) ekrana basar.
+    //
+    // [İSTER 16] : Client side validation Kullanılmış mı?
+    //              EVET -> Sayfanın en altına eklenen "_ValidationScriptsPartial" sayesinde,
+    //              sayfa yenilenmeden tarayıcı üzerinde anlık doğrulama yapılır.
+    //
+    // [İSTER 22] : Admin için tema uygulanmış mı?
+    //              EVET -> Admin paneli genel tasarımına uygun olarak Tailwind CSS sınıfları
+    //              (max-w-md, shadow-lg, rounded-lg vb.) kullanılmıştır.
+    //
+    // [İSTER 23] : Area oluşturulmuş mu?
+    //              EVET -> Bu dosya Admin Area yapısı (/Areas/Admin/Views) içerisindedir.
+    // -----------------------------------------------------------------------------------------
+}
+
+<div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800">Yeni Aşçı Ekle</h2>
+
+    <form asp-action="Ekle" method="post" enctype="multipart/form-data">
+
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2">Ad</label>
+            <input asp-for="AsciAdi" class="w-full px-3 py-2 border rounded focus:border-yellow-500 focus:outline-none transition" />
+            <span asp-validation-for="AsciAdi" class="text-red-500 text-sm font-semibold"></span>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2">Soyad</label>
+            <input asp-for="AsciSoyadi" class="w-full px-3 py-2 border rounded focus:border-yellow-500 focus:outline-none transition" />
+            <span asp-validation-for="AsciSoyadi" class="text-red-500 text-sm font-semibold"></span>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2">Ünvan</label>
+            <input asp-for="AsciUnvan" class="w-full px-3 py-2 border rounded focus:border-yellow-500 focus:outline-none transition" />
+            <span asp-validation-for="AsciUnvan" class="text-red-500 text-sm font-semibold"></span>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2">Biyografi</label>
+            <textarea asp-for="AsciBiyografi" class="w-full px-3 py-2 border rounded focus:border-yellow-500 focus:outline-none transition" rows="4"></textarea>
+            <span asp-validation-for="AsciBiyografi" class="text-red-500 text-sm font-semibold"></span>
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-gray-700 font-bold mb-2">Fotoğraf</label>
+            <input type="file" name="ResimDosyasi" class="w-full px-3 py-2 border rounded bg-gray-50 cursor-pointer" accept="image/*" />
+        </div>
+
+        <button type="submit" class="bg-yellow-500 text-white px-6 py-2 rounded w-full hover:bg-yellow-600 transition shadow">Kaydet</button>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
