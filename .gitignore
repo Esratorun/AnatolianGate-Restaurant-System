@@ -1,3 +1,5 @@
 Web.config
 bin/
 obj/
+"appsettings.json" 
+".vs/" 
